@@ -1,5 +1,7 @@
-function add(a,b) {
-    return a + b;
-}
+const express = require('express');
+const app = express();
+const port = 8080
 
-module.exports = add;
+app.use(express.static("public"))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
