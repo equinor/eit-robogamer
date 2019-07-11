@@ -1,6 +1,7 @@
 import './render.js'
 import { State, Bot } from './state.js';
 import { Render } from './render.js';
+import { Socket } from './socket.js';
 
 function botgen(){
     let bot = new Bot();
@@ -12,9 +13,6 @@ function botgen(){
 }
 
 let state = new State();
-state.home = [botgen(), botgen(), botgen(), botgen()];
-state.away = [botgen(), botgen(), botgen(), botgen()];
 
 let render = new Render(state, document.getElementById('canvas'));
-
-var socket = io();
+let socket = new Socket(io(), state);
