@@ -15,12 +15,6 @@ let state = new State();
 state.home = [botgen(), botgen(), botgen(), botgen()];
 state.away = [botgen(), botgen(), botgen(), botgen()];
 
-let render = new Render(state);
+let render = new Render(state, document.getElementById('canvas'));
 
 var socket = io();
-
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-ctx.fillStyle = 'green';
-ctx.fillRect(10, 10, 150, 100);
