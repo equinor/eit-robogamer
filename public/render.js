@@ -29,17 +29,19 @@ export class Render{
     renderBot(bot, color){
         let x = bot.x / 16 * this._canvas.width;
         let y = bot.y / 9 * this._canvas.height;
+        const h = 40;
+        const w = 46.666666667;
 
 
         this._ctx.translate(x,y);
         this._ctx.fillStyle = color;
         this._ctx.beginPath();
-        this._ctx.arc(0, 0, 20, 0, 2 * Math.PI);
+        this._ctx.rotate(bot.angle);
+        this._ctx.rect(-(w/2), -(h/2), w, h);
         this._ctx.fill();
 
         this._ctx.strokeStyle = "black";
         this._ctx.lineWidth = 2;
-        this._ctx.rotate(bot.angle);
         this._ctx.beginPath();
         this._ctx.moveTo(-5,-15);
         this._ctx.lineTo(0,10);

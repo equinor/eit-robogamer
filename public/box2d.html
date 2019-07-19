@@ -33,7 +33,7 @@
             })
 
             bot.createFixture({
-                shape: pl.Circle(0.5),
+                shape: pl.Box(60/90/2, 70 / 90/2),
                 density: 1,
                 friction: 3,
             });
@@ -54,8 +54,8 @@
                     right -= 1;
                 }
 
-                left = left * 0.1;
-                right = right * 0.1;
+                left = left * 0.15;
+                right = right * 0.15;
 
                 bot.applyLinearImpulse(
                     bot.getWorldVector(Vec2(left, 0)),
