@@ -1,6 +1,8 @@
 import express from 'express';
 import socket from 'socket.io';
 import http from 'http';
+import { BotPos, EnginePower } from './BotPhysics';
+import { Box2DPhysics } from './Box2DPhysics';
 const app = express();
 const server = http.createServer(app);
 const port = 8080
@@ -15,56 +17,6 @@ io.on('connection', function(){
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
-interface BotPos {
-    x: number;
-    y: number;
-    angle: number;
-}
-
-interface EnginePower {
-    left: number, // from -1.0 to 1.0
-    right: number, // from -1.0 to 1.0
-}
-
-interface PositionCallback{
-    (this: void, positions: BotPos[]): void
-}
-
-abstract class BotPhysics {
-    protected onUpdate: PositionCallback;
-
-    constructor(onUpdate: PositionCallback) {
-        this.onUpdate = onUpdate;
-    }
-
-    public abstract setPower(power: [EnginePower]): void;
-}
-
-class FakePhysics extends BotPhysics {
-    
-    
-    constructor(onUpdate: PositionCallback){
-        super(onUpdate);
-
-        setInterval(this.update, 1000);
-    }
-
-    setPower(power: EnginePower[]): void {
-        throw new Error("Method not implemented.");
-    }
-
-    update = () => {
-        this.onUpdate([this.botgen(),this.botgen(),this.botgen(),this.botgen(),this.botgen(),this.botgen(),this.botgen(),this.botgen()]);
-    }
-
-    private botgen(): BotPos{
-        return {
-            x: Math.random() * 16,
-            y: Math.random() * 9,
-            angle: Math.random() * Math.PI * 2,
-        };
-    }
-}
 
 interface Bot {
     x: number;
@@ -89,4 +41,17 @@ function emit(positions:BotPos[]) {
     console.log("sent update");
 }
 
-new FakePhysics(emit);
+let physic = new Box2DPhysics(emit);
+
+function step() {
+    physic.setPower([createPower(), createPower(), createPower(), createPower(), createPower(), createPower(), createPower(), createPower()]);
+}
+
+function createPower(): EnginePower {
+    return {
+        left: (Math.random() * 2) -1,
+        right: (Math.random() * 2) -1,
+    }
+}
+
+setInterval(step, 1000)

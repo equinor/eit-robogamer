@@ -27,6 +27,7 @@
     "@types/node": "^12.6.8",
     "@types/socket.io": "^2.1.2",
     "express": "^4.17.1",
+    "planck-js": "^0.3.6",
     "socket.io": "^2.2.0"
   }
 }
