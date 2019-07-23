@@ -3,6 +3,7 @@ import socket from 'socket.io';
 import http from 'http';
 import { BotPos, EnginePower } from './BotPhysics';
 import { Box2DPhysics } from './Box2DPhysics';
+import { Bot } from './Bot';
 const app = express();
 const server = http.createServer(app);
 const port = 8080
@@ -18,13 +19,8 @@ io.on('connection', function(){
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
-interface Bot {
-    x: number;
-    y: number;
-    a: number;
-}
 
-function toIO(pos:BotPos): Bot{
+function toIO(pos:BotPos){
     return {
         x: pos.x,
         y: pos.y,
@@ -32,22 +28,34 @@ function toIO(pos:BotPos): Bot{
     }
 }
 
-function emit(positions:BotPos[]) {
-    let bots = positions.map(toIO);
+let bots = [new Bot(2,2), new Bot(2,4.5), new Bot(2,7), new Bot(5,4.5), new Bot(14,2), new Bot(14,4.5), new Bot(14,7), new Bot(11,4.5)]
+
+let physic = new Box2DPhysics(step, bots);
+
+function update() {
+    let x = Math.random() * 16;
+    let y = Math.random() * 9;
+
+    for (const bot of bots) {
+        bot.turnToPoint(x,y);
+    }
+}
+
+function step(positions:BotPos[]) {
+    const length = Math.min(bots.length, positions.length);
+    for (let i = 0; i < length; i += 1) {
+        bots[i].pos = positions[i];
+    }
+
+    physic.setPower(bots.map((b) => b.power))
+
+    let payload = positions.map(toIO);
     io.emit("bot", {
-        h: bots.slice(0,4),
-        a: bots.slice(4,8),
+        h: payload.slice(0,4),
+        a: payload.slice(4,8),
     });
-    console.log("sent update");
 }
 
-let bots = [new BotPos(8,4), new BotPos(9,4), new BotPos(9,5), new BotPos(9,3), new BotPos(7,4), new BotPos(7,5), new BotPos(7,3), new BotPos(10,4)]
-
-let physic = new Box2DPhysics(emit, bots);
-
-function step() {
-    physic.setPower([createPower(), createPower(), createPower(), createPower(), createPower(), createPower(), createPower(), createPower()]);
-}
 
 function createPower(): EnginePower {
     return {
@@ -56,4 +64,4 @@ function createPower(): EnginePower {
     }
 }
 
-setInterval(step, 1000)
+setInterval(update, 1000)
