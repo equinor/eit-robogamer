@@ -33,11 +33,8 @@ let bots = [new Bot(2,2), new Bot(2,4.5), new Bot(2,7), new Bot(5,4.5), new Bot(
 let physic = new Box2DPhysics(step, bots);
 
 function update() {
-    let x = Math.random() * 16;
-    let y = Math.random() * 9;
-
     for (const bot of bots) {
-        bot.turnToPoint(x,y);
+        bot.goTo(Math.random() * 16,Math.random() * 9);
     }
 }
 
@@ -54,14 +51,6 @@ function step(positions:BotPos[]) {
         h: payload.slice(0,4),
         a: payload.slice(4,8),
     });
-}
-
-
-function createPower(): EnginePower {
-    return {
-        left: (Math.random() * 2) -1,
-        right: (Math.random() * 2) -1,
-    }
 }
 
 setInterval(update, 1000)

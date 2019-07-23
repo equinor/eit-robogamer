@@ -19,12 +19,33 @@ export class Bot {
 
 
     goTo(x: number, y: number): void {
+        this._power = () => {
+            let dy = y - this.y;
+            let dx = x - this.x;
+            let direction = Math.atan2(dy,dx);
+            let offset = Math.atan2(Math.sin(direction-this.angle), Math.cos(direction-this.angle));
+            let right = 1;
+            let left = 1;
+            if(offset > 0 ){
+                left = offset / Math.PI
+            }
+            if(offset < 0) {
+                right = -offset / Math.PI
+            }
+            let distance = Math.sqrt(dy*dy + dx * dx);
+            let maxPower = Math.min(distance, 1);
+            
+            return {
+                left: left * maxPower,
+                right: right * maxPower,
+            }
+        }
 
     }
 
     turnToPoint(x: number, y: number): void {
-        var dy = y - this.y;
-        var dx = x - this.x;
+        let dy = y - this.y;
+        let dx = x - this.x;
         this.turnToAngle(Math.atan2(dy,dx));
     }
 
