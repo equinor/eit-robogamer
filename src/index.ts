@@ -34,7 +34,23 @@ let physic = new Box2DPhysics(step, bots);
 
 function update() {
     for (const bot of bots) {
-        bot.goTo(Math.random() * 16,Math.random() * 9);
+        var r = Math.random();
+        if(r < 0.25) {
+            bot.goTo(Math.random() * 16,Math.random() * 9);
+            continue;
+        }
+        if(r < 0.5) {
+            bot.turnToPoint(Math.random() * 16,Math.random() * 9);
+            continue;
+        }
+        if(r < 0.75) {
+            bot.power = {
+                left: (Math.random() * 2) - 1,
+                right: (Math.random() * 2) - 1,
+            };
+            continue;
+        }
+        bot.stop();
     }
 }
 
