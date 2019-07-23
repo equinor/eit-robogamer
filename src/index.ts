@@ -41,7 +41,9 @@ function emit(positions:BotPos[]) {
     console.log("sent update");
 }
 
-let physic = new Box2DPhysics(emit);
+let bots = [new BotPos(8,4), new BotPos(9,4), new BotPos(9,5), new BotPos(9,3), new BotPos(7,4), new BotPos(7,5), new BotPos(7,3), new BotPos(10,4)]
+
+let physic = new Box2DPhysics(emit, bots);
 
 function step() {
     physic.setPower([createPower(), createPower(), createPower(), createPower(), createPower(), createPower(), createPower(), createPower()]);

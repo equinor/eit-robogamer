@@ -12,7 +12,7 @@ export class Box2DPhysics extends BotPhysics{
     private world: World;
     private bots: Bot[];
 
-    constructor(onUpdate: PositionCallback){
+    constructor(onUpdate: PositionCallback, bots: BotPos[]){
         super(onUpdate);
 
         this.world = new World({
@@ -21,7 +21,7 @@ export class Box2DPhysics extends BotPhysics{
         this.setupWalls();
 
         let pos = [Vec2(0,0), Vec2(1,0), Vec2(1,1), Vec2(1,-1), Vec2(-1,0), Vec2(-1,1), Vec2(-1,-1), Vec2(2,0)]
-        this.bots = pos.map((p) => this.createBot(p));
+        this.bots = bots.map((b) => this.createBot(b));
 
         setInterval(this.step, Box2DPhysics.stepTime* 1000);
     }
@@ -45,10 +45,12 @@ export class Box2DPhysics extends BotPhysics{
         ground.createFixture(Edge(Vec2(-8, -4.5), Vec2(8, -4.5)));
     }
 
-    private createBot(pos: Vec2):Bot {
+    private createBot(botPos: BotPos):Bot {
+        let pos = Vec2(botPos.x - 8, botPos.y - 4.5);
         let bot = this.world.createBody({
             type: 'dynamic',
             position: pos,
+            angle: botPos.angle,
             linearDamping: 10,
             angularDamping: 10,
         })
@@ -70,8 +72,8 @@ export class Box2DPhysics extends BotPhysics{
 
     private step = () => {
         for (const bot of this.bots) {
-            let left = bot.power.left * 0.15;
-            let right = bot.power.right * 0.15;
+            let left = bot.power.left * 0.195;
+            let right = bot.power.right * 0.195;
             let body = bot.body;
 
             body.applyLinearImpulse(
