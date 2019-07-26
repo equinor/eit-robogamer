@@ -10,7 +10,7 @@ const port = 8080
 const io = socket(server);
 
 
-app.use(express.static("public"));
+app.use(express.static("../webviewer"));
 
 io.on('connection', function(){
     console.log('a user connected');
