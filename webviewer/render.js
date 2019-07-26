@@ -1,6 +1,11 @@
 import './state.js';
+import { boardWidth, botHeight, botWidth } from './sizes.js';
 
 export class Render{
+    /**
+     * @param {State} state
+     * @param {HTMLCanvasElement} canvas
+     */
     constructor(state, canvas){
         this._state = state;
         this._canvas = canvas;
@@ -18,6 +23,8 @@ export class Render{
     render(){
         let self = this;
         this.clear();
+        this._canvas.width = this._canvas.offsetWidth;
+        this._canvas.height = this._canvas.offsetHeight;
         this._state.home.forEach(bot => self.renderBot(bot, "lightblue"));
         this._state.away.forEach(bot => self.renderBot(bot, "red"));
     }
@@ -27,11 +34,12 @@ export class Render{
     }
 
     renderBot(bot, color){
-        let x = bot.x / 16 * this._canvas.width;
-        let y = bot.y / 9 * this._canvas.height;
-        const h = 40;
-        const w = 46.666666667;
+        const pxPerUnit = this._canvas.width / boardWidth;
 
+        let x = bot.x * pxPerUnit;
+        let y = bot.y * pxPerUnit;
+        const h = botHeight * pxPerUnit;
+        const w = botWidth * pxPerUnit;
 
         this._ctx.translate(x,y);
         this._ctx.fillStyle = color;

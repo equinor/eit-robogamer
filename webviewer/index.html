@@ -3,14 +3,31 @@
   <head>
     <title>Robo Game Viewer</title>
     <style>
-      canvas { 
-        border: solid;
+      html, body {
+        background-color: black;
+        margin: 0;
+      }
+      .container {
+        background-color: white;
+        position: relative;
+        width: 100%; 
+        padding-top: 56.25%;
+      }
+      canvas {
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        bottom: 0; 
+        right: 0;
+        width: 100%;
+        height: 100%;
       }
     </style>
   </head>
   <body>
-    <h1>Robo Game Viewer</h1>
-    <canvas id="canvas" height="540" width="960"></canvas>
+    <div class="container">
+        <canvas id="canvas"></canvas>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="main.js"></script>
   </body>
