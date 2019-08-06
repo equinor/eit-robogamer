@@ -14,5 +14,5 @@ function botgen(){
 
 let state = new State();
 
-let render = new Render(state, document.getElementById('canvas'));
+let render = new Render(state, document.getElementById('bots'));
 let socket = new Socket(io(), state);

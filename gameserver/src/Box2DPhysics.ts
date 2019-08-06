@@ -6,22 +6,23 @@ interface Bot {
     body: Body,
 }
 
-export class Box2DPhysics extends BotPhysics{
+export class Box2DPhysics implements BotPhysics{
     static readonly stepTime = 1/60;
 
     private world: World;
-    private bots: Bot[];
+    private bots: Bot[] = [];
+    private _onUpdate: PositionCallback = () => {}
 
-    constructor(onUpdate: PositionCallback, bots: BotPos[]){
-        super(onUpdate);
-
+    constructor(){
         this.world = new World({
             gravity: Vec2(0, 0)
         });
         this.setupWalls();
+    }
 
-        let pos = [Vec2(0,0), Vec2(1,0), Vec2(1,1), Vec2(1,-1), Vec2(-1,0), Vec2(-1,1), Vec2(-1,-1), Vec2(2,0)]
-        this.bots = bots.map((b) => this.createBot(b));
+    public start(onUpdate: PositionCallback, initialPosition: BotPos[]){
+        this._onUpdate = onUpdate;
+        this.bots = initialPosition.map((b) => this.createBot(b));
 
         setInterval(this.step, Box2DPhysics.stepTime* 1000);
     }
@@ -89,7 +90,7 @@ export class Box2DPhysics extends BotPhysics{
             )
         }
         this.world.step(Box2DPhysics.stepTime);
-        this.onUpdate(this.bots.map(botToPos));
+        this._onUpdate(this.bots.map(botToPos));
     }
 }
 

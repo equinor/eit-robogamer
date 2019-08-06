@@ -20,10 +20,7 @@ export interface PositionCallback{
 }
 
 
-export abstract class BotPhysics {
-    protected onUpdate: PositionCallback;
-    constructor(onUpdate: PositionCallback) {
-        this.onUpdate = onUpdate;
-    }
-    public abstract setPower(power: [EnginePower]): void;
+export interface BotPhysics {
+    start(onUpdate: PositionCallback, initialPosition: BotPos[]): void;
+    setPower(power: EnginePower[]): void;
 }

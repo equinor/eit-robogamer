@@ -1,6 +1,6 @@
 import { BotPos, EnginePower } from "./BotPhysics";
 
-export class Bot {
+export default class Bot {
     x: number;
     y: number;
     angle: number;
