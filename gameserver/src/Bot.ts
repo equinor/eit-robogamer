@@ -89,3 +89,25 @@ export default class Bot {
         this._power = () => power;
     }
 }
+
+export class BotView {
+    public readonly pos: BotPos;
+    public readonly power: EnginePower;
+
+    public constructor(bot: Bot) {
+        this.pos = bot.pos;
+        this.power = bot.power;
+    }
+
+    public get x(): number{
+        return this.pos.x;
+    }
+
+    public get y(): number{
+        return this.pos.y;
+    }
+
+    public get angle(): number{
+        return this.pos.angle;
+    }
+}

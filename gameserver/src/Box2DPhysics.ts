@@ -6,7 +6,7 @@ interface Bot {
     body: Body,
 }
 
-export class Box2DPhysics implements BotPhysics{
+export default class Box2DPhysics implements BotPhysics{
     static readonly stepTime = 1/60;
 
     private world: World;

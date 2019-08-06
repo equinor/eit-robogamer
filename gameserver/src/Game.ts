@@ -1,22 +1,25 @@
 import { BotPhysics, BotPos } from "./BotPhysics";
 import Bot from "./Bot";
-import { GameState } from "./GameState";
+import { GameState, GameStateView } from "./GameState";
 
 export default class Game {
-    public onUpdate = () => {};
-
+    public onUpdate:(state: GameStateView) => void = () => {};
 
     private _botPhysics: BotPhysics;
-    private _bots: Bot[] = [new Bot(2,2), new Bot(2,4.5), new Bot(2,7), new Bot(5,4.5), new Bot(14,2), new Bot(14,4.5), new Bot(14,7), new Bot(11,4.5)];
+    private _state: GameState;
 
     constructor(botPhysics: BotPhysics) {
+        this._state = new GameState();
+        this._state.bots = [new Bot(2,2), new Bot(2,4.5), new Bot(2,7), new Bot(5,4.5), new Bot(14,2), new Bot(14,4.5), new Bot(14,7), new Bot(11,4.5)];
+
         this._botPhysics = botPhysics;
-        this._botPhysics.start(this.step.bind(this), this._bots);
+        this._botPhysics.start(this.step.bind(this), this._state.bots);
+
         setInterval(this.update.bind(this), 1000)
     }
 
     update() {
-        for (const bot of this._bots) {
+        for (const bot of this._state.bots) {
             var r = Math.random();
             if(r < 0.25) {
                 bot.goTo(Math.random() * 16,Math.random() * 9);
@@ -38,19 +41,13 @@ export default class Game {
     }
 
     step(positions:BotPos[]) {
-        const length = Math.min(this._bots.length, positions.length);
+        const length = Math.min(this._state.bots.length, positions.length);
         for (let i = 0; i < length; i += 1) {
-            this._bots[i].pos = positions[i];
+            this._state.bots[i].pos = positions[i];
         }
 
-        this._botPhysics.setPower(this._bots.map((b) => b.power))
+        this._botPhysics.setPower(this._state.bots.map((b) => b.power))
 
-        this.onUpdate();
-    }
-
-    get state() {
-        let state = new GameState();
-        state.bots = this._bots;
-        return state;
+        this.onUpdate(new GameStateView(this._state));
     }
 }
