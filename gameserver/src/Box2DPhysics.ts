@@ -1,12 +1,14 @@
-import { BotPhysics, EnginePower, PositionCallback, BotPos  } from "./BotPhysics";
+import BotPhysics, {PositionCallback} from "./BotPhysics";
 import { World, Vec2, Edge, Box, Body } from "planck-js";
+import BotPos from "./models/BotPos";
+import EnginePower from "./models/EnginePower";
 
 interface Bot {
     power: EnginePower,
     body: Body,
 }
 
-export class Box2DPhysics implements BotPhysics{
+export default class Box2DPhysics implements BotPhysics{
     static readonly stepTime = 1/60;
 
     private world: World;
@@ -20,7 +22,7 @@ export class Box2DPhysics implements BotPhysics{
         this.setupWalls();
     }
 
-    public start(onUpdate: PositionCallback, initialPosition: BotPos[]){
+    public start(onUpdate: PositionCallback, initialPosition: readonly BotPos[]){
         this._onUpdate = onUpdate;
         this.bots = initialPosition.map((b) => this.createBot(b));
 
