@@ -1,8 +1,8 @@
 import express from 'express';
 import socket from 'socket.io';
 import http from 'http';
-import { BotPos } from './BotPhysics';
-import { GameStateView } from './GameState';
+import BotPos from './models/BotPos';
+import State from './models/State';
 
 
 export default class UiClient{
@@ -24,8 +24,8 @@ export default class UiClient{
         server.listen(port, () => console.log(`Example app listening on port ${port}!`))
     }
 
-    public newState(state: GameStateView){
-        let positions = state.bots;
+    public newState(state: State){
+        let positions = state.getBotList();
         let payload = positions.map(toIO);
         this._io.emit("bot", {
             h: payload.slice(0,4),
