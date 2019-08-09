@@ -6,7 +6,7 @@
 void setup() {
   Serial.begin(9600, SERIAL_8N1);
 
-  WiFi.begin("network", "password");
+  WiFi.begin("Robonet", "Sp#z12Bd$31Ykrwdu");
 
   Serial.print("Connecting");
   while (WiFi.status() != WL_CONNECTED)
