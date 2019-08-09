@@ -1,3 +1,4 @@
+# script to implement camera tracking
 import cv2
 from cv2 import aruco
 import pandas as pd

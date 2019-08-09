@@ -1,3 +1,4 @@
+# script to process marker image
 import numpy as np
 import cv2, PIL
 from cv2 import aruco
