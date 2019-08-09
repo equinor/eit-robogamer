@@ -4,7 +4,7 @@
 
 // constants
 const char* ssid = "Robonet";
-const char* password = "*****";
+const char* password = "****";
 const unsigned int udpPort = 4210;
 const byte leftPin = 2;
 const byte rightPin = 0;
@@ -27,6 +27,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600, SERIAL_8N1);
   Serial.println();
+
+  WiFi.begin(ssid, password);
 }
 
 void loop() {
@@ -54,14 +56,15 @@ void connectionManager(){
     Serial.println("Connected");
     return;
   }
-  if(status == WL_IDLE_STATUS) {
+  if(status == WL_CONNECTION_LOST) {
+    //we need to reconect.
+    WiFi.begin(ssid, password);
+    Serial.println("Connecting");
     lastStatus = status;
     return;
   }
   // We need to connect or reconnect
-  WiFi.begin(ssid, password);
   lastStatus == status;
-  Serial.println("Connecting");
 }
 
 void readFromWiFi(unsigned long now) {
@@ -116,7 +119,7 @@ void servoManager(unsigned long now) {
   }
 
   //Will only update motors every 50ms
-  if(now - motorUpdate > 50){
+  if(now - motorUpdate > 10){
     leftCurrent = getNewCurrent(leftCurrent, leftTarget);
     rightCurrent = getNewCurrent(rightCurrent, rightTarget);
     leftMotor.write(leftCurrent);
