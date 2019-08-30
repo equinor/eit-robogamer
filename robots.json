@@ -1,0 +1,13 @@
+{
+    "definition": [
+        {
+            "name": "",
+            "id": 0,
+            "trackingId": 0,
+            "ipAdress": "172.0.0.1",
+            "leftCenter": 90,
+            "rightCenter": 90
+        }
+    ],
+    "use": [1,2,3,4,5,6,7,8]
+}
