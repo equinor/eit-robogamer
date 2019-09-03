@@ -5,7 +5,7 @@ export enum Mode {
 }
 
 export default class CliArgs{
-    public static readonly default = new CliArgs("local", "local", Mode.Sim);
+    public static readonly default = new CliArgs("./test_teams/random.js", "./test_teams/random2.js", Mode.Sim);
 
     public constructor(
         public readonly red: string,

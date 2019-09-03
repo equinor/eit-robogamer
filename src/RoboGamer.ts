@@ -3,13 +3,19 @@ import { getArgs } from "./Cli";
 import Box2DPhysics from "./Box2DPhysics";
 import Game from "./Game";
 import UiClient from "./UiClient";
+import Loader from "./Loader";
+import ITeamClient from "./client/ITeamClient";
 
 export default class RoboGamer {
     public static main() {
         const args = getArgs();
+        const red = Loader.team(args.red);
+        const blue = Loader.team(args.blue);
+
+
         switch (args.mode) {
             case Mode.Sim:
-                this.Sim();
+                this.Sim(red, blue);
                 break;
             case Mode.Real:
                 this.Real();
@@ -22,9 +28,9 @@ export default class RoboGamer {
         }
     }
 
-    public static Sim() {
+    public static Sim(red: ITeamClient, blue: ITeamClient) {
         let physic = new Box2DPhysics();
-        let game = new Game(physic);
+        let game = new Game(physic, red, blue);
         let uiClient = new UiClient();
 
         game.onUpdate = uiClient.newState.bind(uiClient);

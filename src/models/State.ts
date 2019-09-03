@@ -34,6 +34,18 @@ export default class State {
         });
     }
 
+    public updateRedTeam(red: readonly Bot[]): State {
+        return this.set({redTeam: red});
+    }
+    public updateBlueTeam(blue: readonly Bot[]): State {
+        return this.set({blueTeam: blue});
+    }
+
+    public addMsToGameTime(ms:number): State {
+        const newTime = this.gameTime + ms / 1000;
+        return this.set({gameTime: newTime});
+    }
+
     public getPower() {
         return [...this.redTeam.map(b => b.power), ...this.blueTeam.map(b => b.power)];
     }
