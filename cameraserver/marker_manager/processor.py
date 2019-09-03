@@ -8,7 +8,10 @@ import pandas as pd
 import math
 
 
-frame = cv2.imread("../marker_images/markers.jpg")
+frame = cv2.imread("../marker_images/markers_xcolor.jpg")
+height, width = frame.shape[:2]
+unit = width/16
+print(height, width)
 plt.figure()
 plt.imshow(frame)
 
@@ -23,13 +26,11 @@ for i in range(len(ids)-1, -1, -1):
     delta_y = c[1, 1] - c[0, 1]
     delta_x = c[1, 0] - c[0, 0]
     angleInRadian = math.atan2(delta_y, delta_x)
-    print(type(ids[i][0]))
-    df = df.append({'id': int(ids[i][0]), 'px': px, 'py': py, 'radian': angleInRadian}, ignore_index=True)
+    df = df.append({'id': int(ids[i][0]), 'px': px/unit, 'py': py/unit, 'radian': angleInRadian}, ignore_index=True)
     
-    print(angleInRadian)
     plt.plot([c[:, 0].mean()], [c[:, 1].mean()], "o", label = "id={0}".format(ids[i]))
 
 df['id'] = df['id'].astype(np.int64)
 print(df)
-#plt.legend()
-#plt.show()
+plt.legend()
+plt.show()

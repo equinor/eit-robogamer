@@ -6,7 +6,7 @@ import math
 import numpy as np
 
 
-def get_cordinates(ids, corners):
+def get_cordinates(ids, corners, unit):
     print(ids)
     df = pd.DataFrame(columns=['id', 'px', 'py', 'radian'])
     try:
@@ -18,7 +18,7 @@ def get_cordinates(ids, corners):
                     delta_y = c[1, 1] - c[0, 1]
                     delta_x = c[1, 0] - c[0, 0]
                     angleInRadian = math.atan2(delta_y, delta_x)
-                    df = df.append({'id': ids[i][0], 'px': px, 'py': py, 'radian': angleInRadian}, ignore_index=True)    
+                    df = df.append({'id': ids[i][0], 'px': px/unit, 'py': py/unit, 'radian': angleInRadian}, ignore_index=True)    
             except:
                 pass
     except:
@@ -36,6 +36,10 @@ if __name__ == '__main__':
     else:
         frame_captured = False
     while frame_captured:
+        # width = capture.get(cv2.CV_CAP_PROP_FRAME_WIDTH)   # float
+        # height = capture.get(cv2.CV_CAP_PROP_FRAME_HEIGHT) # float
+        height, width = frame.shape[:2]
+        unit = width/16
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         parameters =  aruco.DetectorParameters_create()
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
