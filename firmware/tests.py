@@ -1,7 +1,7 @@
 import socket
 import time
 
-ROBOT_IP = "172.27.44.21"
+ROBOT_IP = "172.27.44.12"
 ROBOT_PORT = 4210
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
