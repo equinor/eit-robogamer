@@ -1,5 +1,6 @@
-import BotPos from "./BotPos";
-import EnginePower from "./EnginePower";
+import BotPos from "../bots/BotPos";
+import EnginePower from "../bots/EnginePower";
+
 
 export default class Bot{
     public constructor(

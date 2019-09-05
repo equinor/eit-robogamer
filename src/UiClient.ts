@@ -1,8 +1,8 @@
 import express from 'express';
 import socket from 'socket.io';
 import http from 'http';
-import BotPos from './models/BotPos';
 import State from './models/State';
+import BotPos from './bots/BotPos';
 
 
 export default class UiClient{

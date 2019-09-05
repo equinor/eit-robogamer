@@ -1,6 +1,6 @@
 import Shot from "./Shot";
 import Bot from "./Bot";
-import BotPos from "./BotPos";
+import BotPos from "../bots/BotPos";
 
 export default class State {
     public constructor(

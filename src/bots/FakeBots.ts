@@ -1,19 +1,19 @@
-import BotPhysics, {PositionCallback} from "./BotPhysics";
+import IBotPhysics, {IPositionCallback} from "./IBotPhysics";
 import { World, Vec2, Edge, Box, Body } from "planck-js";
-import BotPos from "./models/BotPos";
-import EnginePower from "./models/EnginePower";
+import BotPos from "./BotPos";
+import EnginePower from "./EnginePower";
 
 interface Bot {
     power: EnginePower,
     body: Body,
 }
 
-export default class Box2DPhysics implements BotPhysics{
+export default class FakeBots implements IBotPhysics{
     static readonly stepTime = 1/60;
 
     private world: World;
     private bots: Bot[] = [];
-    private _onUpdate: PositionCallback = () => {}
+    private _onUpdate: IPositionCallback = () => {}
 
     constructor(){
         this.world = new World({
@@ -22,11 +22,11 @@ export default class Box2DPhysics implements BotPhysics{
         this.setupWalls();
     }
 
-    public start(onUpdate: PositionCallback, initialPosition: readonly BotPos[]){
+    public start(onUpdate: IPositionCallback, initialPosition: readonly BotPos[]){
         this._onUpdate = onUpdate;
         this.bots = initialPosition.map((b) => this.createBot(b));
 
-        setInterval(this.step, Box2DPhysics.stepTime* 1000);
+        setInterval(this.step, FakeBots.stepTime* 1000);
     }
 
     public setPower(power: EnginePower[]): void {
@@ -91,7 +91,7 @@ export default class Box2DPhysics implements BotPhysics{
                 true
             )
         }
-        this.world.step(Box2DPhysics.stepTime);
+        this.world.step(FakeBots.stepTime);
         this._onUpdate(this.bots.map(botToPos));
     }
 }
