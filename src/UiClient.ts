@@ -15,7 +15,7 @@ export default class UiClient{
         this._io = socket(server);
 
 
-        app.use(express.static("../webviewer"));
+        app.use(express.static("./www"));
 
         this._io.on('connection', function(){
             console.log('a user connected');

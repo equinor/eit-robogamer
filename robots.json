@@ -1,0 +1,30 @@
+{
+    "definition": [
+        {
+            "name": "Bot1",
+            "id": 0,
+            "trackingId": 10,
+            "ipAddress": "172.27.44.10",
+            "leftCenter": 90,
+            "rightCenter": 90
+        },
+        {
+            "name": "Bot2",
+            "id": 1,
+            "trackingId": 11,
+            "ipAddress": "172.27.44.11",
+            "leftCenter": 90,
+            "rightCenter": 90,
+            "flipped": true
+        }
+        {
+            "name": "Bot3",
+            "id": 2,
+            "trackingId": 12,
+            "ipAddress": "172.27.44.12",
+            "leftCenter": 90,
+            "rightCenter": 90
+        }
+    ],
+    "use": [0,1,2]
+}
