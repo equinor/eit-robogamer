@@ -8,7 +8,7 @@ import pandas as pd
 import math
 
 
-frame = cv2.imread("../marker_images/markers_xcolor.jpg")
+frame = cv2.imread("../marker_images/markers.jpg")
 height, width = frame.shape[:2]
 unit = width/16
 print(height, width)

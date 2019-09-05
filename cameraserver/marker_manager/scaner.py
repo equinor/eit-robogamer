@@ -1,15 +1,13 @@
 # script to implement camera tracking
 import cv2
 from cv2 import aruco
-import pandas as pd
 import math
 import numpy as np
 
 
 def get_cordinates(ids, corners, unit):
-    print(ids)
-    df = pd.DataFrame(columns=['id', 'px', 'py', 'radian'])
     try:
+        df = []
         if ids.any():
             try:        
                 for i in range(len(ids)-1, -1, -1):
@@ -18,12 +16,12 @@ def get_cordinates(ids, corners, unit):
                     delta_y = c[1, 1] - c[0, 1]
                     delta_x = c[1, 0] - c[0, 0]
                     angleInRadian = math.atan2(delta_y, delta_x)
-                    df = df.append({'id': ids[i][0], 'px': px/unit, 'py': py/unit, 'radian': angleInRadian}, ignore_index=True)    
+                    df.extend([ids[i][0], px/unit, py/unit, angleInRadian])
             except:
                 pass
+            df = "|".join(str(x) for x in df)
     except:
-        return
-    df['id'] = df['id'].astype(np.int64)
+        return ""
     return df
 
 
@@ -36,14 +34,12 @@ if __name__ == '__main__':
     else:
         frame_captured = False
     while frame_captured:
-        # width = capture.get(cv2.CV_CAP_PROP_FRAME_WIDTH)   # float
-        # height = capture.get(cv2.CV_CAP_PROP_FRAME_HEIGHT) # float
         height, width = frame.shape[:2]
         unit = width/16
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         parameters =  aruco.DetectorParameters_create()
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
-        df = get_cordinates(ids, corners)
+        df = get_cordinates(ids, corners, unit)
         print(df)
         #frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
         #cv2.imshow('Captured Frame', frame)

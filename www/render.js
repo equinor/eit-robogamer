@@ -45,7 +45,9 @@ export class Render{
         this._ctx.fillStyle = color;
         this._ctx.beginPath();
         this._ctx.rotate(bot.angle - (Math.PI /2));
-        this._ctx.rect(-(w/2), -(h/2), w, h);
+        this._ctx.arc(0, -15, 0.7*h, 0, 2* Math.PI);
+        //this._ctx.stroke();
+        //this._ctx.rect(-(w/2), -(h/2), w, h);
         this._ctx.fill();
 
         this._ctx.strokeStyle = "black";
