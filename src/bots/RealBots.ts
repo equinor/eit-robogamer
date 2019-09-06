@@ -49,6 +49,7 @@ class Bot {
     }
 
     private powerToByte(power: number, mid: number): number{
+        power = power/2
         if(power == 0) return mid;
         if(power > 0) return Math.round((180 - mid) * power)
         return Math.round(mid * Math.abs(power))
@@ -66,10 +67,11 @@ export default class RealBots implements IBotPhysics{
         for (const id of robotconfig.use) {
             this.bots.push(bots.find(b => b.id == id)!);
         }
+        console.log(this.bots);
 
         setInterval(this.sendPower.bind(this), 25);
 
-        this.camera = spawn("python3", ["./camserver/marker_manager/scanner.py"]);
+        this.camera = spawn("python", ["./cameraserver/marker_manager/scaner.py"]);
         this.camera.stderr!.on('data', (data) => console.error(`child stderr:\n${data}`));
         let lines = readline.createInterface(this.camera.stdout!);
         lines.on("line", this.readLine.bind(this));
@@ -102,8 +104,11 @@ export default class RealBots implements IBotPhysics{
         for (let index = 0; index + 4 < list.length; index += 4) {
             const id = list[index];
             const pos = new BotPos(list[index + 1], list[index + 2], list[index + 3]);
-            this.bots.find(b => b.id == id)!.pos = pos;
+            const bot = this.bots.find(b => b.trackingId == id);
+            if(bot){
+                bot.pos = pos;
+            }
         }
-        this.onUpdate(this.bots.map(b => b.pos))
+        this.onUpdate(this.bots.map(b => b.pos));
     }
 }

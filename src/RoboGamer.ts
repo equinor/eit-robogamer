@@ -5,6 +5,7 @@ import UiClient from "./UiClient";
 import Loader from "./Loader";
 import ITeamClient from "./client/ITeamClient";
 import FakeBots from "./bots/FakeBots";
+import RealBots from "./bots/RealBots";
 
 export default class RoboGamer {
     public static main() {
@@ -18,7 +19,7 @@ export default class RoboGamer {
                 this.Sim(red, blue);
                 break;
             case Mode.Real:
-                this.Real();
+                this.Real(red, blue);
                 break;
             case Mode.Headless:
                 this.Headless();
@@ -36,8 +37,12 @@ export default class RoboGamer {
         game.onUpdate = uiClient.newState.bind(uiClient);
     }
 
-    public static Real() {
-        throw new Error("Real mode is not implemented");
+    public static Real(red: ITeamClient, blue: ITeamClient) {
+        let physic = new RealBots(Loader.roboConfig());
+        let game = new Game(physic, red, blue);
+        let uiClient = new UiClient();
+
+        game.onUpdate = uiClient.newState.bind(uiClient);
     }
 
     public static Headless() {

@@ -4,7 +4,7 @@
 
 // constants
 const char* ssid = "Robonet";
-const char* password = "****";
+const char* password = "Sp#z12Bd$31Ykrwdu";
 const unsigned int udpPort = 4210;
 const byte leftPin = 2;
 const byte rightPin = 0;

@@ -3,6 +3,7 @@ import cv2
 from cv2 import aruco
 import math
 import numpy as np
+import sys
 
 
 def get_cordinates(ids, corners, unit):
@@ -26,7 +27,7 @@ def get_cordinates(ids, corners, unit):
 
 
 if __name__ == '__main__':
-    capture = cv2.VideoCapture(1)
+    capture = cv2.VideoCapture(0)
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
     
     if capture.isOpened():
@@ -41,6 +42,7 @@ if __name__ == '__main__':
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         df = get_cordinates(ids, corners, unit)
         print(df)
+        sys.stdout.flush()
         #frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
         #cv2.imshow('Captured Frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
