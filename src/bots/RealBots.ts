@@ -2,6 +2,8 @@ import IBotPhysics, { IPositionCallback } from "./IBotPhysics";
 import BotPos from "./BotPos";
 import EnginePower from "./EnginePower";
 import dgram, { Socket } from 'dgram'
+import { ChildProcess, spawn } from "child_process";
+import readline from 'readline';
 
 interface BotDefinition {
     name: string;
@@ -57,6 +59,7 @@ export default class RealBots implements IBotPhysics{
     private bots: Bot[] = [];
     private onUpdate: IPositionCallback = () => {}
     private socket: Socket = dgram.createSocket('udp4');
+    private camera: ChildProcess;
 
     constructor(robotconfig: RobotConfig){
         const bots = robotconfig.definition.map(d => new Bot(d));
@@ -65,6 +68,12 @@ export default class RealBots implements IBotPhysics{
         }
 
         setInterval(this.sendPower.bind(this), 25);
+
+        this.camera = spawn("python3", ["./camserver/marker_manager/scanner.py"]);
+        this.camera.stderr!.on('data', (data) => console.error(`child stderr:\n${data}`));
+        let lines = readline.createInterface(this.camera.stdout!);
+        lines.on("line", this.readLine.bind(this));
+
     }
 
     public start(onUpdate: IPositionCallback, pos: BotPos[]): void {
@@ -86,5 +95,15 @@ export default class RealBots implements IBotPhysics{
         for (const bot of this.bots) {
             bot.sendPower(this.socket);
         }
+    }
+
+    private readLine(line:string){
+        const list = line.split("|").map(Number.parseFloat);
+        for (let index = 0; index + 4 < list.length; index += 4) {
+            const id = list[index];
+            const pos = new BotPos(list[index + 1], list[index + 2], list[index + 3]);
+            this.bots.find(b => b.id == id)!.pos = pos;
+        }
+        this.onUpdate(this.bots.map(b => b.pos))
     }
 }
