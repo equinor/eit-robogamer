@@ -1,5 +1,5 @@
 import IBotPhysics, {IPositionCallback} from "./IBotPhysics";
-import { World, Vec2, Edge, Box, Body } from "planck-js";
+import { World, Vec2, Edge, Body, Circle } from "planck-js";
 import BotPos from "./BotPos";
 import EnginePower from "./EnginePower";
 
@@ -59,7 +59,7 @@ export default class FakeBots implements IBotPhysics{
         })
 
         bot.createFixture({
-            shape: Box(60/90/2, 70 / 90/2),
+            shape: Circle(42 / 90),
             density: 1,
             friction: 3,
         });
@@ -81,13 +81,13 @@ export default class FakeBots implements IBotPhysics{
 
             body.applyLinearImpulse(
                 body.getWorldVector(Vec2(left, 0)),
-                body.getWorldPoint(Vec2(0, 0.5)),
+                body.getWorldPoint(Vec2(0, 42 / 90)),
                 true
             )
 
             body.applyLinearImpulse(
                 body.getWorldVector(Vec2(right, 0)),
-                body.getWorldPoint(Vec2(0, -0.5)),
+                body.getWorldPoint(Vec2(0, -42 / 90)),
                 true
             )
         }

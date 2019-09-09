@@ -62,9 +62,9 @@ export default class RealBots implements IBotPhysics{
     private socket: Socket = dgram.createSocket('udp4');
     private camera: ChildProcess;
 
-    constructor(robotconfig: RobotConfig){
-        const bots = robotconfig.definition.map(d => new Bot(d));
-        for (const id of robotconfig.use) {
+    constructor(robotConfig: RobotConfig){
+        const bots = robotConfig.definition.map(d => new Bot(d));
+        for (const id of robotConfig.use) {
             this.bots.push(bots.find(b => b.id == id)!);
         }
         console.log(this.bots);
