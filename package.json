@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "mocha"
+    "test": "mocha -r ts-node/register src/**/*.test.ts"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/equinor/robogamer#readme",
   "devDependencies": {
+    "@types/chai": "^4.2.1",
+    "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "ts-node": "^8.3.0",

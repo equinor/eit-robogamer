@@ -20,6 +20,13 @@ interface RobotConfig {
     use: number[];
 }
 
+export function powerToByte(power: number, mid: number = 90): number{
+    power *= -1;
+    if(power == 0) return mid;
+    if(power > 0) return Math.round(((180 - mid) * power) + mid)
+    return Math.round(mid *  (1 + power))
+}
+
 class Bot {
     public readonly id: number;
     public readonly trackingId: number;
@@ -39,20 +46,13 @@ class Bot {
 
     public getPower(): Uint8Array{
         let array = new Uint8Array(2);
-        array[0] = this.powerToByte(this.power.left, this.leftCenter)
-        array[1] = this.powerToByte(this.power.right, this.rightCenter)
+        array[1] = powerToByte(this.power.left)
+        array[0] = powerToByte(this.power.right)
         return array;
     }
 
     public sendPower(socket: Socket) {
         socket.send(this.getPower(),4210,this.ipAddress)
-    }
-
-    private powerToByte(power: number, mid: number): number{
-        power = power/2
-        if(power == 0) return mid;
-        if(power > 0) return Math.round((180 - mid) * power)
-        return Math.round(mid * Math.abs(power))
     }
 }
 

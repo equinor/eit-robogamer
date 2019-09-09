@@ -6,8 +6,6 @@ export default class Bot{
     public constructor(
         public readonly pos: BotPos,
         public readonly controller: BotController = stop,
-        public readonly canShotAt: number = 0,
-        public readonly disabledUntil: number = 0,
     ) {
     }
 
@@ -28,7 +26,7 @@ export default class Bot{
     }
 
     public get power(): EnginePower {
-        return this.controller(this);
+        return this.controller(this.pos);
     }
   
 
@@ -54,8 +52,8 @@ export default class Bot{
         return this.set({controller: stop});
     }
 
-    public set({pos = this.pos, controller = this.controller, canShotAt = this.canShotAt, disabledUntil = this.disabledUntil}): Bot{
-        return new Bot(pos, controller, canShotAt, disabledUntil)
+    public set({pos = this.pos, controller = this.controller}): Bot{
+        return new Bot(pos, controller)
     }
 }
 
@@ -72,10 +70,10 @@ function goTo(x: number, y: number): BotController {
         let right = 1;
         let left = 1;
         if(offset > 0 ){
-            left = offset / Math.PI
+            left = -offset / Math.PI
         }
         if(offset < 0) {
-            right = -offset / Math.PI
+            right = offset / Math.PI
         }
         let distance = Math.sqrt(dy*dy + dx * dx);
         let maxPower = Math.min(distance, 1);

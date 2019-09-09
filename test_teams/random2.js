@@ -10,7 +10,7 @@ function update(state){
     }
     nextUpdate += 1;
     state.myBots().forEach(bot => {
-        bot.goTo((Math.random() * 12)+2,(Math.random() * 5) + 2);
+        bot.goTo(8,4.5);
         return;
         var r = Math.random();
         if(r < 0.25) {
