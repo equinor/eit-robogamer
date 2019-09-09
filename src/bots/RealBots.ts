@@ -20,19 +20,10 @@ interface RobotConfig {
     use: number[];
 }
 
-export function powerToByte(power: number, mid: number = 90): number{
-    power *= -1;
-    if(power == 0) return mid;
-    if(power > 0) return Math.round(((180 - mid) * power) + mid)
-    return Math.round(mid *  (1 + power))
-}
-
-class Bot {
+export class Bot {
     public readonly id: number;
     public readonly trackingId: number;
     public readonly ipAddress: string;
-    public readonly leftCenter: number;
-    public readonly rightCenter: number;
     public pos: BotPos = new BotPos(0,0,0);
     public power: EnginePower = new EnginePower(0,0);
 
@@ -40,19 +31,22 @@ class Bot {
         this.id = def.id;
         this.trackingId = def.trackingId;
         this.ipAddress = def.ipAddress;
-        this.leftCenter = def.leftCenter;
-        this.rightCenter = def.rightCenter;
     }
 
     public getPower(): Uint8Array{
         let array = new Uint8Array(2);
-        array[1] = powerToByte(this.power.left)
-        array[0] = powerToByte(this.power.right)
+        array[1] = Bot.powerToByte(this.power.left)
+        array[0] = Bot.powerToByte(this.power.right)
         return array;
     }
 
     public sendPower(socket: Socket) {
         socket.send(this.getPower(),4210,this.ipAddress)
+    }
+
+    public static powerToByte(power: number): number{
+        power += 1; // have it go from 0 - 2 and not -1 to 1;
+        return Math.round(power * 90); // multiply by 90 to get from 0-180 and round to whole integer.
     }
 }
 

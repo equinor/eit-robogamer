@@ -44,7 +44,7 @@ def get_cordinates(ids, corners, unit, cali_x, cali_y):
 if __name__ == "__main__":
     data, cali_x, cali_y = get_json("cameraserver/marker_manager/data.txt")
     print(cali_x, cali_y)
-    capture = cv2.VideoCapture(1)
+    capture = cv2.VideoCapture(0)
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
     
     if capture.isOpened():
