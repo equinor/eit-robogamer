@@ -96,9 +96,5 @@ export default class FakeBots implements IBotPhysics{
 function botToPos(bot: Bot): BotPos {
     var pos = bot.body.getPosition();
     var angle = bot.body.getAngle();
-    return {
-        x: pos.x + 8,
-        y: pos.y + 4.5,
-        angle: angle,
-    }
+    return new BotPos(pos.x + 8, pos.y + 4.5, angle);
 }
