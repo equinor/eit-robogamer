@@ -3,6 +3,7 @@ import IBotPhysics from "./bots/IBotPhysics";
 import State from "./models/State";
 import ClientState from "./client/State";
 import ITeamClient from "./client/ITeamClient";
+import Point from "./models/Point";
 
 export default class Game {
     public onUpdate:(state: State) => void = () => {};
@@ -12,7 +13,7 @@ export default class Game {
     private _lastUpdate: number = Date.now()
 
     constructor(botPhysics: IBotPhysics, private _red: ITeamClient, private _blue: ITeamClient) {
-        this._state = State.NewGame([new BotPos(2,2), new BotPos(2,4.5), new BotPos(2,7), new BotPos(5,4.5)], [new BotPos(14,2), new BotPos(14,4.5), new BotPos(14,7), new BotPos(11,4.5)]);
+        this._state = State.NewGame([new Point(2,2), new Point(2,4.5), new Point(2,7), new Point(5,4.5)], [new Point(14,2), new Point(14,4.5), new Point(14,7), new Point(11,4.5)]);
 
         this._botPhysics = botPhysics;
         this._botPhysics.start(this.step.bind(this), this._state.getBotList());

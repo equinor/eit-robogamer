@@ -2,6 +2,8 @@ import IBotPhysics, {IPositionCallback} from "./IBotPhysics";
 import { World, Vec2, Edge, Body, Circle } from "planck-js";
 import BotPos from "./BotPos";
 import EnginePower from "./EnginePower";
+import Angle from "../models/Angle";
+import Point from "../models/Point";
 
 interface Bot {
     power: EnginePower,
@@ -53,7 +55,7 @@ export default class FakeBots implements IBotPhysics{
         let bot = this.world.createBody({
             type: 'dynamic',
             position: pos,
-            angle: botPos.angle,
+            angle: botPos.angle.radians,
             linearDamping: 10,
             angularDamping: 10,
         })
@@ -96,5 +98,5 @@ export default class FakeBots implements IBotPhysics{
 function botToPos(bot: Bot): BotPos {
     var pos = bot.body.getPosition();
     var angle = bot.body.getAngle();
-    return new BotPos(pos.x + 8, pos.y + 4.5, angle);
+    return new BotPos(new Point(pos.x + 8, pos.y + 4.5), new Angle(angle));
 }

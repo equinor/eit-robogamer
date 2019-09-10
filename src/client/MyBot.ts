@@ -1,5 +1,6 @@
 import Bot from "../models/Bot";
 import EnginePower from "../bots/EnginePower";
+import Point from "../models/Point";
 
 export default class MyBot {
     public constructor(public _bot: Bot){
@@ -7,11 +8,11 @@ export default class MyBot {
     }
 
     public goTo(x: number, y:number):void {
-        this._bot = this._bot.goTo(x,y);
+        this._bot = this._bot.goTo(new Point(x,y));
     }
 
     public turnToPoint(x: number, y: number): void {
-        this._bot = this._bot.turnToPoint(x,y);
+        this._bot = this._bot.turnToPoint(new Point(x,y));
     }
 
     public setPower(left: number, right: number): void {

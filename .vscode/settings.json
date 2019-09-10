@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "robo"
-    ]
+    ],
+    "mocha.options": { "compilers": "ts-node/register" },
+    "mocha.requires": [ "ts-node/register" ],
+    "mocha.files.glob": "src/**/*.test.ts"
 }

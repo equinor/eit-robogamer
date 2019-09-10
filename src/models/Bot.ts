@@ -1,5 +1,7 @@
 import BotPos from "../bots/BotPos";
 import EnginePower from "../bots/EnginePower";
+import Angle from "./Angle";
+import Point from "./Point";
 
 
 export default class Bot{
@@ -21,7 +23,7 @@ export default class Bot{
         return this.pos.y;
     }
 
-    public get angle(): number{
+    public get angle(): Angle{
         return this.pos.angle;
     }
 
@@ -34,12 +36,12 @@ export default class Bot{
         return this.set({controller: setPower(power)});
     }
 
-    public goTo(x: number, y: number): Bot{
-        return this.set({controller: goTo(x,y)});
+    public goTo(point:Point): Bot{
+        return this.set({controller: goTo(point)});
     }
 
-    public turnToPoint(x: number, y: number): Bot{
-        return this.set({controller: turnToPoint(x,y)});
+    public turnToPoint(point:Point): Bot{
+        return this.set({controller: turnToPoint(point)});
     }
 
     public stop() {
@@ -55,12 +57,10 @@ export interface BotController{
     (pos: BotPos): EnginePower
 }
 
-function goTo(x: number, y: number): BotController {
+function goTo(point:Point): BotController {
     return (pos:BotPos) => {
-        let dy = y - pos.y;
-        let dx = x - pos.x;
-        let direction = Math.atan2(dy,dx);
-        let offset = Math.atan2(Math.sin(direction-pos.angle), Math.cos(direction-pos.angle));
+        const delta = point.sub(pos.point);
+        let offset = delta.asAngle().sub(pos.angle).right;
         let right = 1;
         let left = 1;
         if(offset > 0 ){
@@ -69,21 +69,17 @@ function goTo(x: number, y: number): BotController {
         if(offset < 0) {
             right = offset / Math.PI
         }
-        let distance = Math.sqrt(dy*dy + dx * dx);
-        let maxPower = Math.min(distance, 1);
+        let maxPower = Math.min(delta.distance(), 1);
         
         return new EnginePower(left * maxPower, right * maxPower);
     }
 
 }
 
-function turnToPoint(x: number, y: number): BotController {
+function turnToPoint(point: Point): BotController {
     return (pos: BotPos) => {
-        const dy = y - pos.y;
-        const dx = x - pos.x;
-        const target = Math.atan2(dy,dx);
-        const offset = Math.atan2(Math.sin(target-pos.angle), Math.cos(target-pos.angle));
-        const right = offset / Math.PI * 0.25; // lets turn nice and slowly.
+        const target = point.sub(pos.point).asAngle();
+        const right = target.sub(pos.angle).right * 0.25; // lets turn nice and slowly.
         return new EnginePower(-right, right);
     }
 }

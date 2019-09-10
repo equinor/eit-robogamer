@@ -4,6 +4,8 @@ import EnginePower from "./EnginePower";
 import dgram, { Socket } from 'dgram'
 import { ChildProcess, spawn } from "child_process";
 import readline from 'readline';
+import Angle from "../models/Angle";
+import Point from "../models/Point";
 
 interface BotDefinition {
     name: string;
@@ -24,7 +26,7 @@ export class Bot {
     public readonly id: number;
     public readonly trackingId: number;
     public readonly ipAddress: string;
-    public pos: BotPos = new BotPos(0,0,0);
+    public pos: BotPos = new BotPos();
     public power: EnginePower = new EnginePower(0,0);
 
     constructor(def:BotDefinition){
@@ -97,7 +99,7 @@ export default class RealBots implements IBotPhysics{
         const list = line.split("|").map(Number.parseFloat);
         for (let index = 0; index + 4 < list.length; index += 4) {
             const id = list[index];
-            const pos = new BotPos(list[index + 1], list[index + 2], list[index + 3]);
+            const pos = new BotPos(new Point(list[index + 1], list[index + 2]), new Angle(list[index + 3]));
             const bot = this.bots.find(b => b.trackingId == id);
             if(bot){
                 bot.pos = pos;
