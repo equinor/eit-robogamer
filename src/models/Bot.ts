@@ -39,13 +39,7 @@ export default class Bot{
     }
 
     public turnToPoint(x: number, y: number): Bot{
-        let dy = y - this.y;
-        let dx = x - this.x;
-        return this.turnToAngle(Math.atan2(dy,dx));
-    }
-
-    public turnToAngle(target: number): Bot{
-        return this.set({controller: turnToAngle(target)});
+        return this.set({controller: turnToPoint(x,y)});
     }
 
     public stop() {
@@ -78,22 +72,19 @@ function goTo(x: number, y: number): BotController {
         let distance = Math.sqrt(dy*dy + dx * dx);
         let maxPower = Math.min(distance, 1);
         
-        return {
-            left: left * maxPower,
-            right: right * maxPower,
-        }
+        return new EnginePower(left * maxPower, right * maxPower);
     }
 
 }
 
-function turnToAngle(target: number): BotController {
+function turnToPoint(x: number, y: number): BotController {
     return (pos: BotPos) => {
-        let offset = Math.atan2(Math.sin(target-pos.angle), Math.cos(target-pos.angle));
-        let right = offset / Math.PI;
-        return {
-            left: -right,
-            right: right,
-        }
+        const dy = y - pos.y;
+        const dx = x - pos.x;
+        const target = Math.atan2(dy,dx);
+        const offset = Math.atan2(Math.sin(target-pos.angle), Math.cos(target-pos.angle));
+        const right = offset / Math.PI * 0.25; // lets turn nice and slowly.
+        return new EnginePower(-right, right);
     }
 }
 
@@ -102,8 +93,5 @@ function setPower(power: EnginePower): BotController {
 }
 
 function stop(): EnginePower {
-    return {
-        left: 0,
-        right: 0,
-    }
+    return EnginePower.NoPower;
 }

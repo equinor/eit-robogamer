@@ -65,10 +65,7 @@ export default class FakeBots implements IBotPhysics{
         });
 
         return {
-            power: {
-                left: 0,
-                right: 0,
-            },
+            power: EnginePower.NoPower,
             body: bot
         }
     }

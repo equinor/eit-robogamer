@@ -1,4 +1,5 @@
 import Bot from "../models/Bot";
+import EnginePower from "../bots/EnginePower";
 
 export default class MyBot {
     public constructor(public _bot: Bot){
@@ -14,7 +15,7 @@ export default class MyBot {
     }
 
     public setPower(left: number, right: number): void {
-        this._bot = this._bot.setPower({left: left,right: right});
+        this._bot = this._bot.setPower(new EnginePower(left,right));
     }
 
     public stop(): void {
