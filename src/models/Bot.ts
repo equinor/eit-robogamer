@@ -60,7 +60,7 @@ export interface BotController{
 function goTo(point:Point): BotController {
     return (pos:BotPos) => {
         const delta = point.sub(pos.point);
-        let offset = delta.asAngle().sub(pos.angle).right;
+        let offset = delta.asAngle().sub(pos.angle).right * 0.5;
         let right = 1;
         let left = 1;
         if(offset > 0 ){
@@ -79,7 +79,7 @@ function goTo(point:Point): BotController {
 function turnToPoint(point: Point): BotController {
     return (pos: BotPos) => {
         const target = point.sub(pos.point).asAngle();
-        const right = target.sub(pos.angle).right * 0.25; // lets turn nice and slowly.
+        const right = target.sub(pos.angle).right * 0.5;
         return new EnginePower(-right, right);
     }
 }

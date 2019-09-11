@@ -1,6 +1,7 @@
 import Bot from "./Bot";
 import BotPos from "../bots/BotPos";
 import Point from "./Point";
+import Angle from "./Angle";
 
 export default class State {
     public constructor(
@@ -55,7 +56,7 @@ export default class State {
     public static readonly Default: State = new State([], [], 0);
 
     public static NewGame(red: readonly Point[], blue: readonly Point[]) {
-        const redTeam = red.map((point) => new Bot(new BotPos(point)));
+        const redTeam = red.map((point) => new Bot(new BotPos(point,new Angle(0))));
         const blueTeam = blue.map((point) => new Bot(new BotPos(point)));
         return new State(redTeam, blueTeam, 0);
     }

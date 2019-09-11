@@ -15,7 +15,7 @@ export default class Point{
     }
 
     public asAngle(): Angle {
-        return new Angle(Math.atan2(this.y, this.x));
+        return new Angle(Math.atan2(this.y, this.x)+ Math.PI);
     }
 
     public toString(): string {

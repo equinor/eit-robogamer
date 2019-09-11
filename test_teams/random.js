@@ -1,3 +1,4 @@
+
 function start(){
 
 }
@@ -5,12 +6,13 @@ function start(){
 let nextUpdate = 0;
 
 function update(state){
-    if(state.gametime() < nextUpdate ){
+     if(state.gametime() < nextUpdate ){
         return;
     }
     nextUpdate += 1;
+
     state.myBots().forEach(bot => {
-        bot.turnToPoint(8,4.5);
+        bot.goTo(8, 4.5);
         return;
         var r = Math.random();
         if(r < 0.25) {

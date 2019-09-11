@@ -103,6 +103,12 @@ export default class RealBots implements IBotPhysics{
             const bot = this.bots.find(b => b.trackingId == id);
             if(bot){
                 bot.pos = pos;
+
+                if(bot.trackingId == 13 ){
+                    console.log(bot.power.left, bot.power.right);
+                    const power = bot.getPower();
+                    console.log(power[0], power[1]);
+                }
             }
         }
         this.onUpdate(this.bots.map(b => b.pos));

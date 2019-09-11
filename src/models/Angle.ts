@@ -18,7 +18,7 @@ export default class Angle{
     }
 
     public get right(): number {
-        return (this.radians / Math.PI) -1
+        return ((this.radians / Math.PI) -1)
     }
     public sub(other:Angle): Angle {
         return new Angle(this.radians - other.radians);
