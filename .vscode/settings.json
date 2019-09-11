@@ -3,6 +3,6 @@
         "robo"
     ],
     "mocha.options": { "compilers": "ts-node/register" },
-    "mocha.requires": [ "ts-node/register" ],
+    "mocha.requires": [ "ts-node/register", "source-map-support/register" ],
     "mocha.files.glob": "src/**/*.test.ts"
 }
