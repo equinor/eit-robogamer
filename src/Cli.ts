@@ -1,24 +1,22 @@
-import CliArgs from "./models/CliArgs";
+import Options from "./models/Options";
 import commander from 'commander';
 
-export function getArgs(): CliArgs {
+export function parseArgs(args: string[]): Options {
     commander.version('0.0.1');
     commander
         .option('-r, --red-team <file>', 'The program to run as the red team')
         .option('-b, --blue-team <file>', 'The program to run as the blue team')
-        .option('--sim', 'Run in simulator. Deafult')
-        .option('--real', 'Run using real robots')
-        .option('--headless', 'Run in simulator witout ui.');
+        .option('--sim', 'Run in simulator. Default')
+        .option('--real', 'Run using real robots');
     
-    commander.parse(process.argv);
+    commander.parse(args);
 
-    var args = CliArgs.default;
+    var options = Options.default;
 
-    if(commander.redTeam) args = args.setRed(commander.redTeam);
-    if(commander.blueTeam) args = args.setBlue(commander.blueTeam);
-    if(commander.headless) args = args.setHeadless();
-    if(commander.real) args = args.setReal();
-    if(commander.sim) args = args.setSim();
+    if(commander.redTeam) options = options.setRed(commander.redTeam);
+    if(commander.blueTeam) options = options.setBlue(commander.blueTeam);
+    if(commander.real) options = options.setReal();
+    if(commander.sim) options = options.setSim();
 
-    return args;
+    return options;
 }

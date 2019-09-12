@@ -1,5 +1,5 @@
-import { Mode } from "./models/CliArgs";
-import { getArgs } from "./Cli";
+import { Mode } from "./models/Options";
+import { parseArgs } from "./Cli";
 import Game from "./Game";
 import UiClient from "./UiClient";
 import Loader from "./Loader";
@@ -8,24 +8,21 @@ import FakeBots from "./bots/FakeBots";
 import RealBots from "./bots/RealBots";
 
 export default class RoboGamer {
-    public static main() {
-        const args = getArgs();
-        const red = Loader.team(args.red);
-        const blue = Loader.team(args.blue);
+    public static main(args: string[]) {
+        const options = parseArgs(args);
+        const red = Loader.team(options.red);
+        const blue = Loader.team(options.blue);
 
 
-        switch (args.mode) {
+        switch (options.mode) {
             case Mode.Sim:
                 this.Sim(red, blue);
                 break;
             case Mode.Real:
                 this.Real(red, blue);
                 break;
-            case Mode.Headless:
-                this.Headless();
-                break;
             default:
-                throw new Error(`Unknown mode ${args.mode}`);
+                throw new Error(`Unknown mode ${options.mode}`);
         }
     }
 
@@ -43,9 +40,5 @@ export default class RoboGamer {
         let uiClient = new UiClient();
 
         game.onUpdate = uiClient.newState.bind(uiClient);
-    }
-
-    public static Headless() {
-        throw new Error("Headless is not implemented");
     }
 }
