@@ -3,3 +3,8 @@ node_modules
 
 __pycache__/
 .idea
+
+chess_board
+test_img
+test.txt
+marker_manager/data.txt

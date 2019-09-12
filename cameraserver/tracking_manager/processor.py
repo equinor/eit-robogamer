@@ -8,7 +8,7 @@ import pandas as pd
 import math
 
 
-frame = cv2.imread("../marker_images/markers.jpg")
+frame = cv2.imread("../test_img/test_real.jpg")
 height, width = frame.shape[:2]
 unit = width/16
 print(height, width)
@@ -22,6 +22,7 @@ corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, paramete
 df = pd.DataFrame(columns=['id', 'px', 'py', 'radian'])
 for i in range(len(ids)-1, -1, -1):
     c = corners[i][0]
+    print(ids[i],c)
     px, py = c[:, 0].mean(), c[:, 1].mean()
     delta_y = c[1, 1] - c[0, 1]
     delta_x = c[1, 0] - c[0, 0]
@@ -31,6 +32,6 @@ for i in range(len(ids)-1, -1, -1):
     plt.plot([c[:, 0].mean()], [c[:, 1].mean()], "o", label = "id={0}".format(ids[i]))
 
 df['id'] = df['id'].astype(np.int64)
-print(df)
+#print(df)
 plt.legend()
 plt.show()
