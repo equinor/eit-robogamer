@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 import Angle from './Angle';
 
-describe('Angle', () => {
+describe('model/Angle', () => {
     describe('degrees', () => {
         it('0', () => {
             expect(new Angle(0).degrees).equals(0);

@@ -1,6 +1,5 @@
 import BotPos from "../bots/BotPos";
 import EnginePower from "../bots/EnginePower";
-import Angle from "./Angle";
 import Point from "./Point";
 
 
@@ -13,18 +12,6 @@ export default class Bot{
 
     public setPos(pos: BotPos): Bot {
         return this.set({pos: pos})
-    }
-
-    public get x(): number{
-        return this.pos.x;
-    }
-
-    public get y(): number{
-        return this.pos.y;
-    }
-
-    public get angle(): Angle{
-        return this.pos.angle;
     }
 
     public get power(): EnginePower {

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 import Point from './Point';
 
-describe('Point', () => {
+describe('model/Point', () => {
     describe('angle', () => {
         [
             [0,0,180],

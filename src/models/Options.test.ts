@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 import Option, { Mode } from './Options';
 
-describe('Option', () => {
+describe('model/Option', () => {
     it('Default', () => {
         expect(Option.default.red).equals('./localTeam.js');
         expect(Option.default.blue).equals('./opponents/random.js');
