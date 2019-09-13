@@ -21,4 +21,8 @@ export default class BotPos {
     get radians() {
         return this.angle.radians
     }
+
+    get degrees() {
+        return this.angle.degrees
+    }
 }

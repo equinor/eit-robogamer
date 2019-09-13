@@ -3,6 +3,11 @@ import BotPos from "../bots/BotPos";
 import Point from "./Point";
 import Angle from "./Angle";
 
+export enum Team {
+    Red,
+    Blue,
+}
+
 export default class State {
     public constructor(
         public readonly redTeam: readonly Bot[],
@@ -31,6 +36,26 @@ export default class State {
             redTeam: this.redTeam.map(updater),
             blueTeam: this.blueTeam.map(updater)
         });
+    }
+
+    public getTeam(team: Team): readonly Bot[]{
+        if(team == Team.Red) {
+            return this.redTeam;
+        }
+        if(team == Team.Blue) {
+            return this.blueTeam;
+        }
+        return [];
+    }
+
+    public updateTeam(team: Team, bots: readonly Bot[]): State{
+        if(team == Team.Red) {
+            return this.set({redTeam: bots});
+        }
+        if(team == Team.Blue) {
+            return this.set({blueTeam: bots});
+        }
+        return this;
     }
 
     public updateRedTeam(red: readonly Bot[]): State {

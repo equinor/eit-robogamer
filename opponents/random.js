@@ -6,12 +6,12 @@ function start(){
 let nextUpdate = 0;
 
 function update(state){
-     if(state.gameTime() < nextUpdate ){
+     if(state.gameTime < nextUpdate ){
         return;
     }
     nextUpdate += 1;
 
-    state.myBots().forEach(bot => {
+    state.myBots.forEach(bot => {
         bot.goTo(8, 4.5);
         return;
         var r = Math.random();
