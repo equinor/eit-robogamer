@@ -51,10 +51,10 @@ function goTo(point:Point): BotController {
         let right = 1;
         let left = 1;
         if(offset > 0 ){
-            left = -offset / Math.PI
+            left = 0.5 + -offset / Math.PI
         }
         if(offset < 0) {
-            right = offset / Math.PI
+            right = 0.5 + offset / Math.PI
         }
         let maxPower = Math.min(delta.distance(), 1);
         

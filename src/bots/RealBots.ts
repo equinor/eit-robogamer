@@ -47,12 +47,15 @@ export class Bot {
     }
 
     // the robots uses a range from 0-180 with about 90 as stand still point.
-    // But have found that about the middle 20% is a dead zone.
+    // But have found that about the middle 10% is a dead zone.
     public static powerToByte(power: number): number{
+        //power += 1;
+        //return Math.round(power * 90);
+
         if (power == 0) return 90;
-        if (power > 0) return Math.round(power * 70) + 110;
+        if (power > 0) return Math.round(power * 80) + 100;
         power += 1; // we now its negative so add one to bring it into the 0-1 range.
-        return Math.round(power * 70);
+        return Math.round(power * 80);
     }
 }
 
@@ -67,7 +70,6 @@ export default class RealBots implements IBotPhysics{
         for (const id of robotConfig.use) {
             this.bots.push(bots.find(b => b.id == id)!);
         }
-        console.log(this.bots);
 
         setInterval(this.sendPower.bind(this), 25);
 
@@ -107,12 +109,6 @@ export default class RealBots implements IBotPhysics{
             const bot = this.bots.find(b => b.trackingId == id);
             if(bot){
                 bot.pos = pos;
-
-                if(bot.trackingId == 13 ){
-                    console.log(bot.power.left, bot.power.right);
-                    const power = bot.getPower();
-                    console.log(power[0], power[1]);
-                }
             }
         }
         this.onUpdate(this.bots.map(b => b.pos));
