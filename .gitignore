@@ -3,6 +3,9 @@ node_modules
 
 __pycache__/
 .idea
+
+chess_board
+test.txt
 coverage
 .nyc_output
 .vscode/
