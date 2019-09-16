@@ -48,13 +48,13 @@ function goTo(point:Point): BotController {
     return (pos:BotPos) => {
         const delta = point.sub(pos.point);
         let offset = delta.asAngle().sub(pos.angle).right * 0.5;
-        let right = 1;
-        let left = 1;
+        let right = 0.5;
+        let left = 0.5;
         if(offset > 0 ){
-            left = 0.5 + -offset / Math.PI
+            left = -offset / Math.PI
         }
         if(offset < 0) {
-            right = 0.5 + offset / Math.PI
+            right = offset / Math.PI
         }
         let maxPower = Math.min(delta.distance(), 1);
         
