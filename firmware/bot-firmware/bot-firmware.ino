@@ -14,7 +14,6 @@ byte leftCurrent = 90;
 byte rightCurrent = 90;
 byte leftTarget = 90;
 byte rightTarget = 90;
-unsigned long motorUpdate = 0;
 unsigned long lastMessage = 0;
 int lastStatus = WL_DISCONNECTED;
 
@@ -118,22 +117,13 @@ void servoManager(unsigned long now) {
     }
   }
 
-  //Will only update motors every 50ms
-  if(now - motorUpdate > 10){
-    leftCurrent = getNewCurrent(leftCurrent, leftTarget);
-    rightCurrent = getNewCurrent(rightCurrent, rightTarget);
+  if(leftTarget != leftCurrent){
+    leftCurrent = leftTarget;
     leftMotor.write(leftCurrent);
-    rightMotor.write(180 - rightCurrent);
-    motorUpdate = now;
   }
-}
 
-byte getNewCurrent(byte current, byte target){
-  if(current > target){
-    return current - 1;
+  if(rightTarget != rightCurrent){
+    rightCurrent = rightTarget;
+    rightMotor.write(180 - rightCurrent);
   }
-  if(current < target){
-    return current + 1;
-  }
-  return current;
 }

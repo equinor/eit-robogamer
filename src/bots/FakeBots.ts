@@ -1,7 +1,9 @@
 import IBotPhysics, {IPositionCallback} from "./IBotPhysics";
-import { World, Vec2, Edge, Box, Body } from "planck-js";
+import { World, Vec2, Edge, Body, Circle } from "planck-js";
 import BotPos from "./BotPos";
 import EnginePower from "./EnginePower";
+import Angle from "../models/Angle";
+import Point from "../models/Point";
 
 interface Bot {
     power: EnginePower,
@@ -53,22 +55,19 @@ export default class FakeBots implements IBotPhysics{
         let bot = this.world.createBody({
             type: 'dynamic',
             position: pos,
-            angle: botPos.angle,
+            angle: botPos.angle.radians,
             linearDamping: 10,
             angularDamping: 10,
         })
 
         bot.createFixture({
-            shape: Box(60/90/2, 70 / 90/2),
+            shape: Circle(42 / 90),
             density: 1,
             friction: 3,
         });
 
         return {
-            power: {
-                left: 0,
-                right: 0,
-            },
+            power: EnginePower.NoPower,
             body: bot
         }
     }
@@ -81,13 +80,13 @@ export default class FakeBots implements IBotPhysics{
 
             body.applyLinearImpulse(
                 body.getWorldVector(Vec2(left, 0)),
-                body.getWorldPoint(Vec2(0, 0.5)),
+                body.getWorldPoint(Vec2(0, 42 / 90)),
                 true
             )
 
             body.applyLinearImpulse(
                 body.getWorldVector(Vec2(right, 0)),
-                body.getWorldPoint(Vec2(0, -0.5)),
+                body.getWorldPoint(Vec2(0, -42 / 90)),
                 true
             )
         }
@@ -99,9 +98,5 @@ export default class FakeBots implements IBotPhysics{
 function botToPos(bot: Bot): BotPos {
     var pos = bot.body.getPosition();
     var angle = bot.body.getAngle();
-    return {
-        x: pos.x + 8,
-        y: pos.y + 4.5,
-        angle: angle,
-    }
+    return new BotPos(new Point(pos.x + 8, pos.y + 4.5), new Angle(angle));
 }

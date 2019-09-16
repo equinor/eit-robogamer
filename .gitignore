@@ -5,6 +5,7 @@ __pycache__/
 .idea
 
 chess_board
-test_img
 test.txt
-marker_manager/data.txt
+coverage
+.nyc_output
+.vscode/

@@ -38,6 +38,6 @@ function toIO(pos:BotPos){
     return {
         x: pos.x,
         y: pos.y,
-        a: pos.angle,
+        a: pos.angle.radians,
     }
 }

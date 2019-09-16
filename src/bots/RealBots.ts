@@ -4,6 +4,8 @@ import EnginePower from "./EnginePower";
 import dgram, { Socket } from 'dgram'
 import { ChildProcess, spawn } from "child_process";
 import readline from 'readline';
+import Angle from "../models/Angle";
+import Point from "../models/Point";
 
 interface BotDefinition {
     name: string;
@@ -20,27 +22,23 @@ interface RobotConfig {
     use: number[];
 }
 
-class Bot {
+export class Bot {
     public readonly id: number;
     public readonly trackingId: number;
     public readonly ipAddress: string;
-    public readonly leftCenter: number;
-    public readonly rightCenter: number;
-    public pos: BotPos = new BotPos(0,0,0);
+    public pos: BotPos = new BotPos();
     public power: EnginePower = new EnginePower(0,0);
 
     constructor(def:BotDefinition){
         this.id = def.id;
         this.trackingId = def.trackingId;
         this.ipAddress = def.ipAddress;
-        this.leftCenter = def.leftCenter;
-        this.rightCenter = def.rightCenter;
     }
 
     public getPower(): Uint8Array{
         let array = new Uint8Array(2);
-        array[0] = this.powerToByte(this.power.left, this.leftCenter)
-        array[1] = this.powerToByte(this.power.right, this.rightCenter)
+        array[1] = Bot.powerToByte(this.power.left)
+        array[0] = Bot.powerToByte(this.power.right)
         return array;
     }
 
@@ -48,11 +46,16 @@ class Bot {
         socket.send(this.getPower(),4210,this.ipAddress)
     }
 
-    private powerToByte(power: number, mid: number): number{
-        power = power/2
-        if(power == 0) return mid;
-        if(power > 0) return Math.round((180 - mid) * power)
-        return Math.round(mid * Math.abs(power))
+    // the robots uses a range from 0-180 with about 90 as stand still point.
+    // But have found that about the middle 10% is a dead zone.
+    public static powerToByte(power: number): number{
+        //power += 1;
+        //return Math.round(power * 90);
+
+        if (power == 0) return 90;
+        if (power > 0) return Math.round(power * 80) + 100;
+        power += 1; // we now its negative so add one to bring it into the 0-1 range.
+        return Math.round(power * 80);
     }
 }
 
@@ -62,12 +65,11 @@ export default class RealBots implements IBotPhysics{
     private socket: Socket = dgram.createSocket('udp4');
     private camera: ChildProcess;
 
-    constructor(robotconfig: RobotConfig){
-        const bots = robotconfig.definition.map(d => new Bot(d));
-        for (const id of robotconfig.use) {
+    constructor(robotConfig: RobotConfig){
+        const bots = robotConfig.definition.map(d => new Bot(d));
+        for (const id of robotConfig.use) {
             this.bots.push(bots.find(b => b.id == id)!);
         }
-        console.log(this.bots);
 
         setInterval(this.sendPower.bind(this), 25);
 
@@ -103,7 +105,7 @@ export default class RealBots implements IBotPhysics{
         const list = line.split("|").map(Number.parseFloat);
         for (let index = 0; index + 4 < list.length; index += 4) {
             const id = list[index];
-            const pos = new BotPos(list[index + 1], list[index + 2], list[index + 3]);
+            const pos = new BotPos(new Point(list[index + 1], list[index + 2]), new Angle(list[index + 3]));
             const bot = this.bots.find(b => b.trackingId == id);
             if(bot){
                 bot.pos = pos;

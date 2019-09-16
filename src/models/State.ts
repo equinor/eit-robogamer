@@ -1,14 +1,18 @@
-import Shot from "./Shot";
 import Bot from "./Bot";
 import BotPos from "../bots/BotPos";
+import Point from "./Point";
+import Angle from "./Angle";
+
+export enum Team {
+    Red,
+    Blue,
+}
 
 export default class State {
     public constructor(
         public readonly redTeam: readonly Bot[],
         public readonly blueTeam: readonly Bot[],
-        public readonly score: number, // 1.0 red team vicory, 0.0 blue team victory
-        public readonly gameTime: number, // Seconds since match started in gametime.
-        public readonly shots: readonly Shot[],
+        public readonly gameTime: number, // Seconds since match started in game time.
     ) { }
 
     public getBotList(): readonly BotPos[] {
@@ -34,6 +38,26 @@ export default class State {
         });
     }
 
+    public getTeam(team: Team): readonly Bot[]{
+        if(team == Team.Red) {
+            return this.redTeam;
+        }
+        if(team == Team.Blue) {
+            return this.blueTeam;
+        }
+        return [];
+    }
+
+    public updateTeam(team: Team, bots: readonly Bot[]): State{
+        if(team == Team.Red) {
+            return this.set({redTeam: bots});
+        }
+        if(team == Team.Blue) {
+            return this.set({blueTeam: bots});
+        }
+        return this;
+    }
+
     public updateRedTeam(red: readonly Bot[]): State {
         return this.set({redTeam: red});
     }
@@ -50,15 +74,15 @@ export default class State {
         return [...this.redTeam.map(b => b.power), ...this.blueTeam.map(b => b.power)];
     }
 
-    public set({ redTeam = this.redTeam, blueTeam = this.blueTeam, score = this.score, gameTime = this.gameTime, shots = this.shots }): State {
-        return new State(redTeam, blueTeam, score, gameTime, shots);
+    public set({ redTeam = this.redTeam, blueTeam = this.blueTeam, gameTime = this.gameTime, }): State {
+        return new State(redTeam, blueTeam, gameTime);
     }
 
-    public static readonly Default: State = new State([], [], 0.5, 0, []);
+    public static readonly Default: State = new State([], [], 0);
 
-    public static NewGame(red: readonly BotPos[], blue: readonly BotPos[]) {
-        const redTeam = red.map((pos) => new Bot(pos));
-        const blueTeam = blue.map((pos) => new Bot(pos));
-        return new State(redTeam, blueTeam, 0.5, 0, []);
+    public static NewGame(red: readonly Point[], blue: readonly Point[]) {
+        const redTeam = red.map((point) => new Bot(new BotPos(point,new Angle(0))));
+        const blueTeam = blue.map((point) => new Bot(new BotPos(point)));
+        return new State(redTeam, blueTeam, 0);
     }
 }
