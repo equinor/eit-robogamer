@@ -1,96 +1,53 @@
-# script to implement camera tracking
-import cv2
-from cv2 import aruco
-import math
 import numpy as np
-import sys
-import json
+import cv2
+import glob
 
-def get_cordinates(ids, corners):
-    try:
-        global corner_1, corner_2, corner_3, corner_4, units
-        if ids.any():
-            try:
-                for i in range(len(ids)-1, -1, -1):
-                    if ids[i][0] == 66:
-                        print("maker 66 detected")
-                        c = corners[i][0]                        
-                        corner_1 = c[2]
-                        #print(corner_1);
-                    if ids[i][0] == 68:
-                        print("maker 68 detected")
-                        c = corners[i][0]                        
-                        corner_2 = c[3]
-                        #print(corner_2);
-                    if ids[i][0] == 69:
-                        print("maker 69 detected")
-                        c = corners[i][0]                        
-                        corner_3 = c[0]
-                        #print(corner_3);
-                    if ids[i][0] == 67:
-                        print("maker 67 detected")
-                        c = corners[i][0]                        
-                        corner_4 = c[1]
-                        #print(corner_4);
-                
-                        delta_y = c[1, 1] - c[0, 1]
-                        delta_x = c[1, 0] - c[0, 0]
-                        angleInRadian = math.atan2(delta_y, delta_x)
-                edge_up =  corner_2[0]-corner_1[0]  #distance between 66 and 68 
-                edge_right = corner_3[1] - corner_2[1]
-                edge_down = corner_3[0] - corner_4[0]
-                edge_left = corner_4[1] - corner_1[1]
-                edge_max = max(edge_up, edge_down)
-                units = edge_max/16
-                #print(edge_up/units,edge_right/units,edge_down/units, edge_left/units)
-                        #print([ids[i][0], px, py, angleInRadian])
-            except:
-                pass
-    except:
-        return ""
-    return units, corner_1, corner_2, corner_3, corner_4
+# termination criteria
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-if __name__ == '__main__':
-    capture = cv2.VideoCapture(1)
-    aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
-    
-    if capture.isOpened():
-        frame_captured, frame = capture.read()
-    else:
-        frame_captured = False
-    while frame_captured:
-        # height, width = frame.shape[:2]
-        # unit = width/16
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        parameters =  aruco.DetectorParameters_create()
-        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
-        try:
-            units, corner_1, corner_2, corner_3, corner_4 = get_cordinates(ids, corners)
-        
-            print(units, corner_1, corner_2, corner_3, corner_4)
-            
-            data = {
-            "unit": units,
-            "corner_1": [int(x) for x in corner_1],
-            "corner_2": [int(x) for x in corner_2],
-            "corner_3": [int(x) for x in corner_3],
-            "corner_4": [int(x) for x in corner_4],
-            }
-            with open('data.txt', 'w') as outfile:
-                json.dump(data, outfile)
-        except: 
-            #print("Not all corner markers are in tracking area")
-            pass
-        
-        break
+# prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+objp = np.zeros((5*7,3), np.float32)
+objp[:,:2] = np.mgrid[0:7,0:5].T.reshape(-1,2)
 
-        sys.stdout.flush()
-        #frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
-        cv2.imshow('Captured Frame', frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-        frame_captured, frame = capture.read()
+# Arrays to store object points and image points from all the images.
+objpoints = [] # 3d point in real world space
+imgpoints = [] # 2d points in image plane.
 
-    # release the video capture
-    capture.release()
-    cv2.destroyAllWindows()
+images = glob.glob('../chess_board/*.jpg')
+
+for fname in images:
+    img = cv2.imread(fname)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+    # Find the chess board corners
+    ret, corners = cv2.findChessboardCorners(gray, (7,5),None)
+    print(corners)
+    # If found, add object points, image points (after refining them)
+    if ret == True:
+        objpoints.append(objp)
+
+        corners2 = cv2.cornerSubPix(gray,corners,(11,11),(-1,-1),criteria)
+        print (corners2)
+        imgpoints.append(corners2)
+
+        # Draw and display the corners
+        img = cv2.drawChessboardCorners(img, (7,5), corners2,ret)
+        cv2.imshow('img',img)
+        cv2.waitKey(500)
+ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+img = cv2.imread('../test_img/test.jpg')
+h,  w = img.shape[:2]
+newcameramtx, roi=cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
+
+np.save("calib_mtx", mtx)
+np.save("calib_dist", dist)
+
+# undistort
+dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
+
+# crop the image
+x,y,w,h = roi
+dst = dst[y:y+h, x:x+w]
+#cv2.imwrite('calibresult.png',dst)
+
+cv2.destroyAllWindows()
