@@ -20,7 +20,8 @@ export default class Game {
     private _blue: Client;
 
     constructor(botPhysics: IBotPhysics, red: ITeamClient, blue: ITeamClient) {
-        this._state = State.NewGame([new Point(2,2), new Point(2,4.5), new Point(2,7), new Point(5,4.5)], [new Point(14,2), new Point(14,4.5), new Point(14,7), new Point(11,4.5)]);
+        //this._state = State.NewGame([new Point(2,2), new Point(2,4.5), new Point(2,7), new Point(5,4.5)], [new Point(14,2), new Point(14,4.5), new Point(14,7), new Point(11,4.5)]);
+        this._state = State.NewGame([new Point(2,2)], []);
         this._red = {
             client: red,
             state: new ClientState(this, Team.Red)

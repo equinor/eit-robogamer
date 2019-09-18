@@ -2,6 +2,7 @@ import Bot from "./Bot";
 import BotPos from "../bots/BotPos";
 import Point from "./Point";
 import Angle from "./Angle";
+import EnginePower from "../bots/EnginePower";
 
 export enum Team {
     Red,
@@ -81,8 +82,8 @@ export default class State {
     public static readonly Default: State = new State([], [], 0);
 
     public static NewGame(red: readonly Point[], blue: readonly Point[]) {
-        const redTeam = red.map((point) => new Bot(new BotPos(point,new Angle(0))));
-        const blueTeam = blue.map((point) => new Bot(new BotPos(point)));
+        const redTeam = red.map((point) => new Bot(new BotPos(point,new Angle(0)), new BotPos(point), new EnginePower()));
+        const blueTeam = blue.map((point) => new Bot(new BotPos(point),  new BotPos(point), new EnginePower()));
         return new State(redTeam, blueTeam, 0);
     }
 }

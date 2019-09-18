@@ -6,6 +6,10 @@ import Point from "./Point";
 export default class Bot{
     public constructor(
         public readonly pos: BotPos,
+        public readonly prev_pos: BotPos,
+        public readonly base_power: EnginePower,
+        public readonly left_calibrated: boolean = false,
+        public readonly right_calibrated: boolean = false,
         public readonly controller: BotController = stop,
     ) {
     }
@@ -23,6 +27,10 @@ export default class Bot{
         return this.set({controller: setPower(power)});
     }
 
+    public setBasePower(power:EnginePower) {
+        return this.set({base_power: power})
+    }
+
     public goTo(point:Point): Bot{
         return this.set({controller: goTo(point)});
     }
@@ -35,8 +43,17 @@ export default class Bot{
         return this.set({controller: stop});
     }
 
-    public set({pos = this.pos, controller = this.controller}): Bot{
-        return new Bot(pos, controller)
+    public done_left(){
+        return this.set({left_cal: true});
+    }
+    public done_right(){
+        return this.set({right_cal: true});
+    }
+    public set_prev_pos(pos: BotPos) {
+        return this.set({prev_pos: pos});
+    }
+    public set({pos = this.pos, base_power = this.base_power, prev_pos = this.prev_pos, left_cal = this.left_calibrated,right_cal = this.right_calibrated,  controller = this.controller}): Bot{
+        return new Bot(pos,  prev_pos, base_power, left_cal, right_cal, controller)
     }
 }
 
@@ -73,7 +90,7 @@ function turnToPoint(point: Point): BotController {
 
 function setPower(power: EnginePower): BotController {
     return () => power;
-}
+} 
 
 function stop(): EnginePower {
     return EnginePower.NoPower;
