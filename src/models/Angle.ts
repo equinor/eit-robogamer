@@ -7,6 +7,7 @@ export default class Angle{
         while(this.radians > Math.PI*2){
             this.radians -= Math.PI*2;
         }
+        this.radians -= Math.PI;
     }
 
     public static fromDegrees(degrees: number): Angle {
@@ -17,9 +18,10 @@ export default class Angle{
         return this.radians * 180 / Math.PI
     }
 
-    public get right(): number {
+    public get normalized(): number {
         return ((this.radians / Math.PI) -1)
     }
+
     public sub(other:Angle): Angle {
         return new Angle(this.radians - other.radians);
     }

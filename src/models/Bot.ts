@@ -1,9 +1,11 @@
 import BotPos from "../bots/BotPos";
 import EnginePower from "../bots/EnginePower";
 import Point from "./Point";
+import PidController from "./PidController";
 
 
 export default class Bot{
+    private pid = new PidController(1.2, 0.5, 1);
     public constructor(
         public readonly pos: BotPos,
         public readonly controller: BotController = stop,
@@ -24,7 +26,7 @@ export default class Bot{
     }
 
     public goTo(point:Point): Bot{
-        return this.set({controller: goTo(point)});
+        return this.set({controller: goTo(point, this.pid)});
     }
 
     public turnToPoint(point:Point): Bot{
@@ -44,29 +46,34 @@ export interface BotController{
     (pos: BotPos): EnginePower
 }
 
-function goTo(point:Point): BotController {
-    return (pos:BotPos) => {
-        const delta = point.sub(pos.point);
-        let offset = delta.asAngle().sub(pos.angle).right * 0.5;
-        let right = 0.5;
-        let left = 0.5;
-        if(offset > 0 ){
-            left = -offset / Math.PI
+let printTimer = Date.now();
+
+function goTo(target: Point, pid: PidController): BotController {
+    return (pos: BotPos) => {
+        const lineToTarget = target.sub(pos);
+        let angleOffset = pos.angle.sub(lineToTarget.asAngle()).radians;
+        pid.updateInput(angleOffset);
+        let angleInput = pid.getInput();
+        let right = -angleInput;
+        let left = angleInput;
+        let speed = - Math.min(Math.sqrt(Math.pow(lineToTarget.x, 2) + Math.pow(lineToTarget.y, 2)), 0.5);
+        if (Date.now() - printTimer > 1000) {
+            printTimer = Date.now();
+            console.log(`Position: (${r2d(pos.x, 1000)}, ${r2d(pos.y, 1000)}), Power: (${r2d(left, 1000)}, ${r2d(right, 1000)}), Angle: ${r2d(pos.radians, 1000)}, Angle offset: ${r2d(angleOffset, 1000)}, Angle input: ${r2d(angleInput, 1000)}`)
         }
-        if(offset < 0) {
-            right = offset / Math.PI
-        }
-        let maxPower = Math.min(delta.distance(), 1);
-        
-        return new EnginePower(left * maxPower, right * maxPower);
+        return new EnginePower(speed + left / Math.PI, speed + right / Math.PI);
     }
 
+}
+
+function r2d(num: number, len: number) {
+    return Math.round(num * len) / len;
 }
 
 function turnToPoint(point: Point): BotController {
     return (pos: BotPos) => {
         const target = point.sub(pos.point).asAngle();
-        const right = target.sub(pos.angle).right * 0.5;
+        const right = target.sub(pos.angle).normalized * 0.5;
         return new EnginePower(-right, right);
     }
 }
