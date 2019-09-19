@@ -10,8 +10,8 @@ let incr = 1.0 / 90.0;
 let calibration_time = 0;
 let wait = 10;
 function pos_equal(pos1, pos2) {
-    E_alpha = 0.01;
-    E_pos = 0.01;
+    E_alpha = 3;
+    E_pos = 1.0;
     angle_diff = 180 - Math.abs(Math.abs(pos1.angle.degrees - pos2.angle.degrees) - 180); 
     return angle_diff < E_alpha && Math.abs(pos1.x - pos2.x) < E_pos && Math.abs(pos1.y - pos2.y) < E_pos;
 }
@@ -34,7 +34,7 @@ function update(state){
             return;
         }
         else if(!bot._get().left_calibrated){
-            console.log("done calibrating right", bot._get().base_power);
+            console.log("done calibrating left", bot._get().base_power);
             bot.calibrate(bot._get().base_power.left - incr, bot._get().base_power.right);
             bot.done_left();
             bot.set_prev_pos(bot._get().pos);
