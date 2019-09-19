@@ -16,7 +16,17 @@
             "name": "Bot3",
             "id": 2,
             "trackingId": 12,
-            "ipAddress": "172.27.44.12"
+            "ipAddress": "172.27.44.12",
+            "left": {
+                "forward": [115,180],
+                "backwards": [0, 67],
+                "stopped": 90
+            },
+            "right": {
+                "forward": [111,180],
+                "backwards": [0, 83],
+                "stopped": 90
+            }
         },
         {
             "name": "Bot4",

@@ -49,8 +49,8 @@ export class Bot {
     // the robots uses a range from 0-180 with about 90 as stand still point.
     // But have found that about the middle 10% is a dead zone.
     public static powerToByte(power: number): number{
-        //power += 1;
-        //return Math.round(power * 90);
+        power += 1;
+        return Math.round(power * 90);
 
         if (power == 0) return 90;
         if (power > 0) return Math.round(power * 80) + 100;
