@@ -3,7 +3,7 @@ import ITeamClient from "../src/client/ITeamClient";
 
 export default class RandomStrategy implements ITeamClient {
     private timer = 0;
-    private updateRate = 0.1;
+    private updateRate = 250;
     private targetX = 8;
     private targetY = 4.5;
 
@@ -20,8 +20,8 @@ export default class RandomStrategy implements ITeamClient {
 
         state.myBots.forEach(bot => {
             if (Math.abs(bot.x - this.targetX) < 0.5 && Math.abs(bot.y - this.targetY) < 0.5) {
-                this.targetX = Math.random() * 16;
-                this.targetY = Math.random() * 9;
+                this.targetX = Math.random() * 14 + 1;
+                this.targetY = Math.random() * 7 + 1;
             }
             bot.goTo(this.targetX, this.targetY);
             return;

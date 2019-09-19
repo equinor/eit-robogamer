@@ -5,7 +5,7 @@ import PidController from "./PidController";
 
 
 export default class Bot{
-    private pid = new PidController(1.2, 0.5, 1);
+    private pid = new PidController(0.1, 0.1, 0.1);
     public constructor(
         public readonly pos: BotPos,
         public readonly controller: BotController = stop,
@@ -57,7 +57,7 @@ function goTo(target: Point, pid: PidController): BotController {
         let right = -angleInput;
         let left = angleInput;
         let distance = Math.sqrt(Math.pow(lineToTarget.x, 2) + Math.pow(lineToTarget.y, 2));
-        let speed = - Math.max(Math.min(distance / 5, 0.5), 0.15);
+        let speed = - Math.min(Math.max(distance / 5, -0.2), -0.15);
         if (Date.now() - printTimer > 1000) {
             printTimer = Date.now();
             console.log(`Position: (${r2d(pos.x, 1000)}, ${r2d(pos.y, 1000)}), Power: (${r2d(left, 1000)}, ${r2d(right, 1000)}), Speed: ${r2d(speed, 1000)}, Angle: ${r2d(pos.radians, 1000)}, Angle offset: ${r2d(angleOffset, 1000)}, Angle input: ${r2d(angleInput, 1000)}, Distance: ${r2d(distance, 1000)}`)
