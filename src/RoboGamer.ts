@@ -6,12 +6,13 @@ import Loader from "./Loader";
 import ITeamClient from "./client/ITeamClient";
 import FakeBots from "./bots/FakeBots";
 import RealBots from "./bots/RealBots";
+import RandomStrategy from "../strategies/testRandom";
 
 export default class RoboGamer {
     public static main(args: string[]) {
         const options = parseArgs(args);
-        const red = Loader.team(options.red);
-        const blue = Loader.team(options.blue);
+        const red = new RandomStrategy();
+        const blue = new RandomStrategy();
 
 
         switch (options.mode) {

@@ -2,8 +2,8 @@ import Angle from "./Angle";
 
 export default class Point{
     constructor(
-        public readonly x:number,
-        public readonly y:number,
+        public x: number,
+        public y: number,
     ){}
 
     public sub(other:Point): Point {
@@ -15,7 +15,7 @@ export default class Point{
     }
 
     public asAngle(): Angle {
-        return new Angle(Math.atan2(this.y, this.x)+ Math.PI);
+        return new Angle(Math.atan2(this.y, this.x));
     }
 
     public toString(): string {
