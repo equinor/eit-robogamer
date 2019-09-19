@@ -8,7 +8,7 @@ let nextUpdate = 0;
 let incr = 1.0 / 90.0;
 
 let calibration_time = 0;
-
+let wait = 10;
 function pos_equal(pos1, pos2) {
     E_alpha = 0.01;
     E_pos = 0.01;
@@ -23,11 +23,14 @@ function update(state){
     nextUpdate += 1;
 
     state.myBots.forEach(bot => {
+        if(state.gameTime < wait) 
+        {
+            return;
+        }
         
         if (!(bot._get().left_calibrated) && pos_equal(bot._get().pos, bot._get().prev_pos)){
             bot.calibrate(bot._get().base_power.left + incr, bot._get().base_power.right );
-            bot.runBasePower();
-            console.log(bot._get().base_power);
+            bot.runBasePower(); 
             return;
         }
         else if(!bot._get().left_calibrated){
@@ -39,17 +42,14 @@ function update(state){
             calibration_time = state.gameTime;
             return;
         }
-        //console.log(pos_equal(bot._get().pos, bot._get().prev_pos));
-
+        
         if (!pos_equal(bot._get().pos, bot._get().prev_pos) && state.gameTime - calibration_time < 10) {
             bot.set_prev_pos(bot._get().pos);
-            
             return;
         }
         if (!(bot._get().right_calibrated) && pos_equal(bot._get().pos, bot._get().prev_pos)){
             bot.calibrate(bot._get().base_power.left, bot._get().base_power.right  + incr);
             bot.runBasePower();
-            console.log(bot._get().base_power);
             return;
         }
         else if(!bot._get().right_calibrated){
