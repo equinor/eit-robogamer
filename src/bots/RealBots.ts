@@ -104,7 +104,7 @@ export default class RealBots implements IBotPhysics{
     }
 
     private readLine(line:string){
-        var timestamp = Date.now() - this.start_timestamp;
+        var timestamp = (Date.now() - this.start_timestamp)/1000.0;
         const list = line.split("|").map(Number.parseFloat);
         for (let index = 0; index + 4 < list.length; index += 4) {
             const id = list[index];

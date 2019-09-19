@@ -86,9 +86,9 @@ export default class Calibrator implements ITeamClient {
     update(state: State): void {
         var sizex = 16;
         var sizey = 9;
-        var posepsilon = 10 / 1920;
+        var posepsilon = 95 / 1920;
         var rotepsilon = Math.PI * 2 * 0.05;
-        var loglen = 15;
+        var loglen = 40;
         state._bots.forEach((bot,idx) => {
             var cali = this.data[idx];
             cali.log.push(bot.botPos);
@@ -152,7 +152,7 @@ export default class Calibrator implements ITeamClient {
                                     cali.delay = Math.max(0.01, curr.timestamp - cali.logstart);
                                     cali.logging = false;
                                     cali.stage = Stage.DeadzoneLeft;
-                                    console.log(this.team + idx, "done with Delay", cali.delay);
+                                    console.log(this.team + idx, "done with Delay", cali.delay, len);
                                 }
                             }
                             break;
@@ -171,11 +171,11 @@ export default class Calibrator implements ITeamClient {
                             if (moved || rotated) {
                                 cali.logging = false;
                                 if (cali.stage == Stage.DeadzoneLeft) {
-                                    console.log(this.team + idx, "done with DeadZoneLeft", cali.powerpct);
+                                    console.log(this.team + idx, "done with DeadZoneLeft", cali.powerpct, len, rot);
                                     cali.deadzone[0] = cali.powerpct;
                                     cali.stage = Stage.DeadzoneRight;
                                 } else {
-                                    console.log(this.team + idx, "done with DeadZoneRight", cali.powerpct);
+                                    console.log(this.team + idx, "done with DeadZoneRight", cali.powerpct, len, rot);
                                     cali.deadzone[1] = cali.powerpct;
                                     cali.stage = Stage.PowerDiff;
                                 }
@@ -203,6 +203,7 @@ export default class Calibrator implements ITeamClient {
                                     if (anglediff < -Math.PI * 2)
                                         anglediff += Math.PI * 2;
                                     
+                                    //todo: make sure its moving, and not standing still
                                     var straight_ish = Math.abs(anglediff) < rotepsilon;
                                     if (straight_ish) {
                                         cali.logging = false;
