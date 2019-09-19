@@ -1,10 +1,11 @@
 export enum Mode {
+    Calibrate,
     Sim,
     Real,
 }
 
 export default class Options{
-    public static readonly default = new Options("./localTeam.js", "./opponents/random.js", Mode.Sim);
+    public static readonly default = new Options("./localTeam.js", "./opponents/random.js", Mode.Calibrate);
 
     public constructor(
         public readonly red: string,

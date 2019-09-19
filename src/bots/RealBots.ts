@@ -64,6 +64,7 @@ export default class RealBots implements IBotPhysics{
     private onUpdate: IPositionCallback = () => {}
     private socket: Socket = dgram.createSocket('udp4');
     private camera: ChildProcess;
+    private start_timestamp: number = -1;
 
     constructor(robotConfig: RobotConfig){
         const bots = robotConfig.definition.map(d => new Bot(d));
@@ -80,7 +81,8 @@ export default class RealBots implements IBotPhysics{
 
     }
 
-    public start(onUpdate: IPositionCallback, pos: BotPos[]): void {
+    public start(onUpdate: IPositionCallback, pos: BotPos[], timestamp: number): void {
+        this.start_timestamp = timestamp;
         const length = Math.min(pos.length, this.bots.length);
         for (let i = 0; i < length; i += 1) {
             this.bots[i].pos = pos[i];
@@ -102,10 +104,11 @@ export default class RealBots implements IBotPhysics{
     }
 
     private readLine(line:string){
+        var timestamp = Date.now() - this.start_timestamp;
         const list = line.split("|").map(Number.parseFloat);
         for (let index = 0; index + 4 < list.length; index += 4) {
             const id = list[index];
-            const pos = new BotPos(new Point(list[index + 1], list[index + 2]), new Angle(list[index + 3]));
+            const pos = new BotPos(new Point(list[index + 1], list[index + 2]), new Angle(list[index + 3]), timestamp);
             const bot = this.bots.find(b => b.trackingId == id);
             if(bot){
                 bot.pos = pos;

@@ -2,7 +2,7 @@ import EnginePower from "./EnginePower";
 import BotPos from "./BotPos";
 
 export default interface IBotPhysics {
-    start(onUpdate: IPositionCallback, initialPosition: readonly BotPos[]): void;
+    start(onUpdate: IPositionCallback, initialPosition: readonly BotPos[], timestamp: number): void;
     setPower(power: EnginePower[]): void;
 }
 

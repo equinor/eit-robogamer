@@ -1,10 +1,15 @@
 import Bot from "../models/Bot";
 import EnginePower from "../bots/EnginePower";
 import Point from "../models/Point";
+import BotPos from "../bots/BotPos";
 
 export default class MyBot {
     public constructor(private _get: () => Bot, private _set: (bot:Bot) => void ){
         
+    }
+
+    public get botPos(): BotPos {
+        return this._get().pos;
     }
 
     public get x():number {

@@ -30,7 +30,7 @@ export default class Game {
             state: new ClientState(this, Team.Blue)
         }
         this._botPhysics = botPhysics;
-        this._botPhysics.start(this.step.bind(this), this._state.getBotList());
+        this._botPhysics.start(this.step.bind(this), this._state.getBotList(), this._lastUpdate);
         this._red.client.start(this._red.state);
         this._blue.client.start(this._red.state);
     }

@@ -16,6 +16,7 @@ export default class FakeBots implements IBotPhysics{
     private world: World;
     private bots: Bot[] = [];
     private _onUpdate: IPositionCallback = () => {}
+    private start_timestamp: number = -1;
 
     constructor(){
         this.world = new World({
@@ -24,7 +25,8 @@ export default class FakeBots implements IBotPhysics{
         this.setupWalls();
     }
 
-    public start(onUpdate: IPositionCallback, initialPosition: readonly BotPos[]){
+    public start(onUpdate: IPositionCallback, initialPosition: readonly BotPos[], timestamp: number){
+        this.start_timestamp = timestamp;
         this._onUpdate = onUpdate;
         this.bots = initialPosition.map((b) => this.createBot(b));
 
@@ -91,12 +93,12 @@ export default class FakeBots implements IBotPhysics{
             )
         }
         this.world.step(FakeBots.stepTime);
-        this._onUpdate(this.bots.map(botToPos));
+        this._onUpdate(this.bots.map(this.botToPos.bind(this)));
+    }
+    private botToPos(bot: Bot): BotPos {
+        var pos = bot.body.getPosition();
+        var angle = bot.body.getAngle();
+        return new BotPos(new Point(pos.x + 8, pos.y + 4.5), new Angle(angle), (Date.now() - this.start_timestamp)/1000.0);
     }
 }
 
-function botToPos(bot: Bot): BotPos {
-    var pos = bot.body.getPosition();
-    var angle = bot.body.getAngle();
-    return new BotPos(new Point(pos.x + 8, pos.y + 4.5), new Angle(angle));
-}
