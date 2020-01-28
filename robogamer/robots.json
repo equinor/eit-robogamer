@@ -1,0 +1,59 @@
+{
+    "definition": [
+        {
+            "name": "Bot1",
+            "id": 0,
+            "trackingId": 10,
+            "ipAddress": "172.27.44.10"
+        },
+        {
+            "name": "Bot2",
+            "id": 1,
+            "trackingId": 11,
+            "ipAddress": "172.27.44.11"
+        },
+        {
+            "name": "Bot3",
+            "id": 2,
+            "trackingId": 12,
+            "ipAddress": "172.27.44.12"
+        },
+        {
+            "name": "Bot4",
+            "id": 3,
+            "trackingId": 13,
+            "ipAddress": "172.27.44.13"
+        },
+        {
+            "name": "Bot5",
+            "id": 4,
+            "trackingId": 14,
+            "ipAddress": "172.27.44.14"
+        },
+        {
+            "name": "Bot6",
+            "id": 5,
+            "trackingId": 15,
+            "ipAddress": "172.27.44.15"
+        },
+        {
+            "name": "Bot7",
+            "id": 6,
+            "trackingId": 16,
+            "ipAddress": "172.27.44.16"
+        },
+        {
+            "name": "Bot8",
+            "id": 7,
+            "trackingId": 17,
+            "ipAddress": "172.27.44.17"
+        },
+        {
+            "name": "Bot9",
+            "id": 8,
+            "trackingId": 18,
+            "ipAddress": "172.27.44.18"
+        }
+    ],
+    "use": [0,1,2,3,4,5,6,7]
+}
