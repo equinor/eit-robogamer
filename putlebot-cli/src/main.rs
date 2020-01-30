@@ -1,8 +1,7 @@
 #![warn(clippy::all)]
 
 use clap::{App};
-use putlebot_server::{
-    Config, putlebot_start};
+use putlebot_server::putlebot_start;
 
 fn main() {
     let _matches = App::new("PutleBot")
@@ -11,5 +10,5 @@ fn main() {
         .get_matches();
     
     println!("Starting server");
-    putlebot_start(Config{});
+    putlebot_start();
 }

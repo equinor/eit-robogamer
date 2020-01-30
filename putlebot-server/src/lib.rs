@@ -1,21 +1,23 @@
 #![warn(clippy::all)]
 
+// Porting js code so will allow dead code for now.
+#![allow(dead_code)]
+
+mod models;
+
 use tokio::runtime::Runtime;
 use futures::{FutureExt, StreamExt};
 use warp::Filter;
 
-pub struct Config {
-}
 
-pub fn putlebot_start(config: Config){
+pub fn putlebot_start(){
     let mut rt = Runtime::new().unwrap();
-    rt.block_on(putlebot_start_async(config));
+    rt.block_on(putlebot_start_async());
 }
 
-async fn putlebot_start_async(_config: Config) {
+async fn putlebot_start_async() {
     let www = warp::fs::dir("www");
 
-    // GET /hello/warp => 200 OK with body "Hello, warp!"
     let socket = warp::path("socket")
         .and(warp::ws())
         .map(|ws: warp::ws::Ws| {
