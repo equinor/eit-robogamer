@@ -2,4 +2,5 @@
 
 members = [
     "putlebot-cli",
+    "putlebot-server",
 ]
