@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Robo Game Viewer</title>
+    <style>
+      html, body {
+        background-color: black;
+        margin: 0;
+      }
+      .container {
+        background-color: white;
+        position: relative;
+        width: 100%; 
+        padding-top: 56.25%;
+      }
+      canvas {
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        bottom: 0; 
+        right: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <canvas id="gameboard"></canvas>
+        <canvas id="bots"></canvas>
+    </div>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
