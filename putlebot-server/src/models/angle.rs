@@ -1,6 +1,7 @@
 #[derive(Debug, Clone, Copy)]
 pub struct Angle(f64);
 
+use crate::models::point::Point;
 use std::f64::consts::PI;
 
 impl Angle {
@@ -21,6 +22,10 @@ impl Angle {
 
     pub fn from_degrees(degrees: f64) -> Angle {
         Angle::from_radians(degrees.to_radians())
+    }
+
+    pub fn from_point(point: Point) -> Angle {
+        Angle::from_radians(point.y().atan2(point.x()) + PI)
     }
 
     pub fn radians(self) -> f64 {
@@ -69,6 +74,18 @@ mod tests {
         assert_approx_eq!(Angle::from_degrees(degrees).radians(), radians);
     }
 
+    #[test_case( 0.0, 0.0 => 180)]
+    #[test_case( 1.0, 0.0 => 180)]
+    #[test_case( 1.0, 1.0 => 225)]
+    #[test_case( 0.0, 1.0 => 270)]
+    #[test_case( -1.0, 1.0 => 315)]
+    #[test_case( -1.0, 0.0 => 360)]
+    #[test_case( -1.0, -1.0 => 45)]
+    #[test_case( 0.0, -1.0 => 90)]
+    #[test_case( 1.0, -1.0 => 135)]
+    fn point(x: f64, y: f64) -> u32 {
+        Angle::from_point(Point::new(x,y)).rounded()
+    }
    
     #[test_case( -90.0 => 270)]
     #[test_case( -180.0 => 180)]
