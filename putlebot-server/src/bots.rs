@@ -1,3 +1,3 @@
-mod bot_physics;
-mod bot_pos;
-mod engine_power;
+pub mod bot_physics;
+pub mod bot_pos;
+pub mod engine_power;

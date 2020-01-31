@@ -5,6 +5,8 @@ pub struct EnginePower{
 }
 
 impl EnginePower {
+    pub const IDLE: EnginePower = EnginePower{left: 0.0, right: 0.0};
+
     pub fn new(left: f64, right: f64) -> EnginePower {
         EnginePower{
             left: left.max(-1.0).min(1.0),
