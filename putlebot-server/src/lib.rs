@@ -3,6 +3,7 @@
 // Porting js code so will allow dead code for now.
 #![allow(dead_code)]
 
+mod bots;
 mod models;
 
 use tokio::runtime::Runtime;

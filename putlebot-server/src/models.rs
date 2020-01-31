@@ -1,2 +1,2 @@
-mod angle;
-mod point;
+pub mod angle;
+pub mod point;
