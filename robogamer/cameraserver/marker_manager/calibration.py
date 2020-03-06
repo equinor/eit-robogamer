@@ -51,7 +51,7 @@ def get_cordinates(ids, corners):
     return units, corner_1, corner_2, corner_3, corner_4
 
 if __name__ == '__main__':
-    capture = cv2.VideoCapture(1)
+    capture = cv2.VideoCapture(0)
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
     
     if capture.isOpened():
@@ -79,13 +79,13 @@ if __name__ == '__main__':
             with open('data.txt', 'w') as outfile:
                 json.dump(data, outfile)
         except: 
-            #print("Not all corner markers are in tracking area")
+            print("Not all corner markers are in tracking area")
             pass
         
         break
 
         sys.stdout.flush()
-        #frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
+        frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
         cv2.imshow('Captured Frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

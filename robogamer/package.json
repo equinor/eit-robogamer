@@ -44,7 +44,7 @@
       ".ts",
       ".tsx"
     ],
-    "include":[
+    "include": [
       "src/**/*.ts"
     ],
     "exclude": [
@@ -55,6 +55,6 @@
       "lcovonly",
       "text-summary"
     ],
-    "all": true  
+    "all": true
   }
 }

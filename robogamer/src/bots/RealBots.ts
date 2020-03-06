@@ -73,7 +73,7 @@ export default class RealBots implements IBotPhysics{
 
         setInterval(this.sendPower.bind(this), 25);
 
-        this.camera = spawn("python", ["./cameraserver/marker_manager/scaner.py"]);
+        this.camera = spawn("python3", ["./cameraserver/marker_manager/scaner.py"]);
         this.camera.stderr!.on('data', (data) => console.error(`child stderr:\n${data}`));
         let lines = readline.createInterface(this.camera.stdout!);
         lines.on("line", this.readLine.bind(this));

@@ -96,7 +96,7 @@ def get_coordinates(ids, corners, objpts, imgpts, marker_size):
 
 if __name__ == "__main__":
     
-    capture = cv2.VideoCapture(1)
+    capture = cv2.VideoCapture(0)
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
     mtx = np.load("cameraserver/marker_manager/calib_mtx.npy")
