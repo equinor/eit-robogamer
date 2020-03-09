@@ -1,6 +1,14 @@
-[workspace]
+[package]
+name = "putlebot"
+version = "0.1.0"
+authors = ["Ole Martin Gjersvik <olgj@equinor.com>"]
+edition = "2018"
 
-members = [
-    "putlebot-cli",
-    "camera"
-]
+[dependencies]
+clap = "2.33.0"
+rscam = "0.5.5"
+image = "0.23.1"
+
+[dependencies.async-std]
+version = "1.5.0"
+features = ["unstable", "attributes"]
