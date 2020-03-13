@@ -1,5 +1,6 @@
 #![warn(clippy::all)]
 pub mod camera;
+pub mod tagging;
 
 use async_std::sync::channel;
 use std::time::Instant;
@@ -16,4 +17,8 @@ pub async fn camera_test() {
         println!("{} lag: {:?}", frame.id, frame.instant.elapsed()).await;
     }
     println!("{}", now.elapsed().as_secs_f32()).await;
+}
+
+pub fn tag_test() {
+    tagging::tagtest();
 }
