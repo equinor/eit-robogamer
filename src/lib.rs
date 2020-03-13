@@ -13,7 +13,7 @@ pub async fn camera_test() {
     let now = Instant::now();
     for _ in 0..60 {
         let frame = r.recv().await.unwrap();
-        println!("{}", frame.id).await;
+        println!("{} lag: {:?}", frame.id, frame.instant.elapsed()).await;
     }
     println!("{}", now.elapsed().as_secs_f32()).await;
 }
