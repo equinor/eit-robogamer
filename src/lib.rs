@@ -23,5 +23,5 @@ pub async fn camera_test() {
 
 pub async fn tag_test() {
     let mut april = AprilTag::new();
-    println!("Detections found:  {}", april.detect()).await;
+    println!("Detections found:  {:?}", april.detect()).await;
 }
