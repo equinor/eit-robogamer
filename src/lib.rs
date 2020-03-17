@@ -6,6 +6,8 @@ use async_std::sync::channel;
 use std::time::Instant;
 use async_std::println;
 
+use tagging::AprilTag;
+
 pub async fn camera_test() {
     let (s, r) = channel(10);
 
@@ -19,6 +21,7 @@ pub async fn camera_test() {
     println!("{}", now.elapsed().as_secs_f32()).await;
 }
 
-pub fn tag_test() {
-    tagging::tagtest();
+pub async fn tag_test() {
+    let mut april = AprilTag::new();
+    println!("Detections found:  {}", april.detect()).await;
 }
