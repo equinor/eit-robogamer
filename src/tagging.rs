@@ -1,13 +1,7 @@
 use apriltag_sys::*;
-use std::ffi::CString;
 use std::slice;
 
-#[derive(Debug)]
-pub struct Detection {
-    id: u32,
-    center: [f64; 2],
-    corners: [[f64; 2]; 4]
-}
+use crate::models::{Detection, Frame};
 
 pub struct AprilTag {
     td: *mut apriltag_detector,
@@ -26,11 +20,15 @@ impl AprilTag {
         unsafe { (*self.td).debug = debug as i32 };
     }
 
-    pub fn detect(&mut self) -> Vec<Detection> {
+    pub fn detect(&mut self, frame: &Frame) -> Vec<Detection> {
         unsafe {
-            let file = CString::new("test2.pnm").expect("CString::new failed");
-            let im = image_u8_create_from_pnm(file.as_ptr());
-            let april_detections = apriltag_detector_detect(self.td, im);
+            let mut im = image_u8{
+                width: frame.image.width() as i32,
+                height: frame.image.height() as i32,
+                stride: frame.image.width() as i32,
+                buf: frame.image.as_ptr() as *mut u8
+            };
+            let april_detections = apriltag_detector_detect(self.td, &mut im);
 
             let data:*const *const apriltag_detection = (*april_detections).data.cast();
             let data = slice::from_raw_parts(data, (*april_detections).size as usize);

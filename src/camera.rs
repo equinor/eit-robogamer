@@ -2,22 +2,11 @@ use async_std::{
     task,
     sync::Sender
 };
-use image::{
-    ImageBuffer,
-    Luma,
-};
 use std::{
-    time::Instant,
-    vec::Vec
+    time::Instant
 };
 use image::imageops::colorops::grayscale;
-
-pub struct Frame {
-    pub camera: u8,
-    pub id: u64,
-    pub instant: Instant,
-    pub image: ImageBuffer<Luma<u8>, Vec<u8>>,
-}
+use crate::models::Frame;
 
 pub fn start(sender:Sender<Frame>) {
     task::spawn(async move {
