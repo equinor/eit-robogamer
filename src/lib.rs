@@ -12,13 +12,18 @@ use models::Frame;
 
 pub async fn camera_test() {
     let (s, r) = channel(10);
+    let mut april = AprilTag::new();
 
     camera::start(s);
 
     let now = Instant::now();
     for _ in 0..60 {
         let frame = r.recv().await.unwrap();
-        println!("{} lag: {:?}", frame.id, frame.instant.elapsed()).await;
+        let framelag = Instant::now();
+        println!("{} lag: {:?}", frame.id, framelag.duration_since(frame.instant)).await;
+        let tags = april.detect(&frame);
+        let taglag = Instant::now();
+        println!("Detections found: {}, lag: {:?}", tags.len(), taglag.duration_since(framelag)).await;
     }
     println!("{}", now.elapsed().as_secs_f32()).await;
 }
