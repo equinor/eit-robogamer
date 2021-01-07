@@ -1,5 +1,7 @@
 # RoboGamer
 
+Archived project.
+
 ## Quick start
 
 * `npm install` to download the internet.
